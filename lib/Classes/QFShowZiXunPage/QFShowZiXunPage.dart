@@ -2,10 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:huoqilin_project/Classes/QFShowZiXunPage/QFZiXunInfo.dart';
-import 'package:huoqilin_project/Classes/tools/QFTopSelectView.dart';
-import 'package:huoqilin_project/Classes/tools/QFTopSelectView2.dart';
-import 'package:huoqilin_project/Classes/tools/QFTopSelectView3.dart';
-import 'package:huoqilin_project/Classes/tools/QFTopSelectView4.dart';
+import 'package:huoqilin_project/Classes/tools/NetWork/common.dart';
+import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView.dart';
+import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView2.dart';
+import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView3.dart';
+import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView4.dart';
+import 'package:huoqilin_project/Classes/tools/NetWork/SKRequest.dart';
+import 'package:huoqilin_project/Classes/tools/NetWork/QFZiXunApis.dart';
+
+import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
+
+// import 'package:flustars/flustars.dart';
+// import 'package:common_utils/common_utils.dart';
+
+// import 'package:base_library/base_library.dart';
 
 class QFShowZiXunPage extends StatefulWidget {
   @override
@@ -13,159 +23,87 @@ class QFShowZiXunPage extends StatefulWidget {
 }
 
 class _QFShowZiXunPage extends State<QFShowZiXunPage> {
-  Widget getHomeView() {
-    return Container(
-        child: Column(
-      children: <Widget>[
-        TabBar(
-          labelColor: Colors.blue,
-          labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: Colors.blue,
-          indicatorSize: TabBarIndicatorSize.label,
-          indicatorWeight: 3,
-          indicatorPadding: EdgeInsets.fromLTRB(8, 0, 8, 5),
-          tabs: [
-            Tab(
-              text: '自选',
-            ),
-            Tab(text: '推荐'),
-            Tab(text: '关注'),
-            Tab(text: '热榜'),
-          ],
-        ),
-        TabBarView(children: [
-          QFZiXunInfo(),
-          // QFZiXunInfo(),
-          // QFZiXunInfo(),
-          // QFZiXunInfo(),
-        ]),
-      ],
-    ));
+  List<ZiXunMainModel1> modules = [];
+
+  int selectIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+    // getTypeList();
   }
 
-  Widget getStack() {
-    return SizedBox(
-      width: 250,
-      height: 250,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: 250,
-            height: 20,
-            color: Colors.yellow,
-          ),
-          Container(
-            padding: EdgeInsets.all(0.0),
-            alignment: Alignment.topCenter,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Colors.black.withAlpha(0),
-                  Colors.lightBlue,
-                  Colors.red
-                ],
-              ),
-            ),
-            child: Text(
-              "ForegroundForegroundForegroundForegroundForegroundForeground Text",
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
-            ),
-          ),
-        ],
-      ),
-    );
+  void _getCallBack(int value) {
+    print(value);
+
+    setState(() {
+      selectIndex = value;
+    });
   }
 
-  Widget getDrawp() {
-    Wrap(
-      spacing: 8.0, // gap between adjacent chips
-      runSpacing: 4.0, // gap between lines
-      children: <Widget>[
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.blue.shade900, child: Text('AH')),
-          label: Text('Hamilton'),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.blue.shade900, child: Text('ML')),
-          label: Text('Lafayette'),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.blue.shade900, child: Text('HM')),
-          label: Text('Mulligan'),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.blue.shade900, child: Text('JL')),
-          label: Text('Laurens'),
-        ),
-      ],
-    );
-  }
+  // Future<List<ZiXunMainModel1>> getTypeList() async {
+  //   BaseResp<List> baseResp = await DioUtil().request<List>(
+  //       Method.get, QFZiXunApis.getPath(path: QFZiXunApis.ZIXUNGetTypeList));
+  //   List<ZiXunMainModel1> bannerList;
+  //   if (baseResp.code != Constant.status_success) {
+  //     return new Future.error(baseResp.msg);
+  //   }
+  //   if (baseResp.data != null) {
+  //     bannerList = baseResp.data.map((value) {
+  //       return ZiXunMainModel1.fromJson(value);
+  //     }).toList();
+  //   }
+  //   return bannerList;
+  // }
 
-  Widget getTopSelect() {
-    return Row(
-      children: <Widget>[
-        Chip(
-          label: Text(
-            "chip组件",
-            style: TextStyle(
-                fontSize: 15.0,
-                color: Color(0xff333333),
-                fontStyle: FontStyle.italic),
-          ),
-          labelPadding: EdgeInsets.only(left: 3.0),
-          avatar: Icon(
-            Icons.home,
-            color: Color(0xff00ff00),
-          ),
-          onDeleted: () {},
-          // deleteIcon: Icon(Icons.delete),
-          deleteIconColor: Color(0xffff0000),
-          deleteButtonTooltipMessage: "手下留情",
-          backgroundColor: Color(0xfff1f1f1),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-          materialTapTargetSize: MaterialTapTargetSize.padded,
-        ),
-      ],
-    );
-  }
+  Future<void> fetchData() async {
+    for (var i = 0; i < 200; i++) {
+      var model = ZiXunMainModel1();
+      model.title = "sdasdas";
+      if (i % 3 == 0) {
+        model.id = 1;
+      } else {
+        model.id = 2;
+      }
 
-  Widget getSubViews() {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: getTopSelect(),
-        ),
-        Expanded(
-          child: new ListView(
-            padding: EdgeInsets.all(0),
-            children: [
-              // topSelect(),
-              new Image.asset(
-                'lib/assets/images/sky.jpg',
-                height: 240.0,
-                fit: BoxFit.cover,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+      if (i % 2 == 0) {
+        model.title = "理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨";
+        model.url =
+            "理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨";
+      } else {
+        model.title = "理费价着大豆价格上涨";
+        model.url = "着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨";
+      }
+
+      model.imagePath = "ss";
+
+      modules.add(model);
+    }
+    // try {
+    //   var responseJson = await Request.get(action: "/News/GetTypeList");
+    //   List moduleData = responseJson['DataList'];
+    //   List<String> modules = [];
+    //   moduleData.forEach((data) {
+    //     modules.add("sasdadas");
+    //   });
+
+    //   setState(() {
+    //     this.modules = modules;
+    //   });
+    // } catch (e) {
+    //   // Toast.show(e.toString());
+    // }
   }
 
   Widget setBody() {
-    QFTopSelectView topSelect = QFTopSelectView();
+    QFTopSelectView topSelect = QFTopSelectView(
+      onChanged: _getCallBack,
+      selectIndex: 0,
+    );
+    print(selectIndex);
     Widget showView;
-    print(topSelect.selectIndex);
-
-    switch (topSelect.selectIndex) {
+    switch (selectIndex) {
       case 0:
       case 2:
         showView = QFTopSelectView2();
@@ -178,9 +116,113 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     }
     return Column(
       children: <Widget>[
-        QFTopSelectView(),
+        topSelect,
         showView,
       ],
+    );
+  }
+
+// Color.fromARGB(255, 197, 215, 242)
+  Widget createListCell1(ZiXunMainModel1 model) {
+    return Container(
+      // height: double.infinity,
+      child: Row(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            width: 30,
+            color: Colors.red,
+
+            height: double.infinity,
+            // child: Container(
+            //   // height: double.infinity,
+            //   width: 1,
+            //   color: Colors.red,
+            //   // height: 33,
+            // )
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 12, 16, 0),
+                  child: Text(
+                    "14:38",
+                    style: TextStyle(
+                        fontSize: 12, color: Color.fromARGB(255, 52, 125, 235)),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 16, 0),
+                  child: Text(
+                    model.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromARGB(255, 39, 48, 62)),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 16, 12),
+                  child: Text(
+                    model.url,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Color.fromARGB(255, 115, 130, 144)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget createListCell2() {
+    return Container(
+      padding: const EdgeInsets.only(left: 11),
+      child: Row(
+        children: <Widget>[
+          Image.asset('lib/assets/images/show_zixun_news_date_mark.png'),
+          Container(
+            padding: EdgeInsets.only(left: 8),
+            child: Text("2018-05-06",
+                style: TextStyle(
+                  color: Color.fromARGB(255, 16, 101, 230),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                )),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget createListView() {
+    return ListView.builder(
+      itemCount: modules.length,
+      itemBuilder: (context, index) {
+        var model = modules[index];
+        // return Container(
+        //   child: Column(
+        //     children: <Widget>[
+
+        //     ],
+        //   ),
+        // );
+        if (model.id == 2) {
+          return createListCell1(model);
+        } else {
+          return createListCell2();
+        }
+      },
     );
   }
 
@@ -210,6 +252,10 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   },
                 )
               ],
+              bottom: PreferredSize(
+                child: setBody(),
+                preferredSize: null,
+              ),
             ),
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -222,29 +268,9 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
               ),
             ),
           ),
-          preferredSize: Size(MediaQuery.of(context).size.width, 45),
+          preferredSize: Size(MediaQuery.of(context).size.width, 120),
         ),
-        // appBar: AppBar(
-        //   brightness: Brightness.light,
-        //   title: Text("资讯"),
-        //   backgroundColor: Color.fromARGB(255, 38, 110, 217),
-        //   elevation: 0,
-        //   actions: <Widget>[
-        //     IconButton(
-        //       // icon: Image.asset("lib/assets/images/community_show_head_image1"),
-        //       // icon: Icons.access_alarm,
-        //       icon: Icon(Icons.ac_unit),
-        //       onPressed: () {
-        //         print("跳");
-        //         Navigator.push(
-        //             context,
-        //             new MaterialPageRoute(
-        //                 builder: (context) => new QFZiXunInfo()));
-        //       },
-        //     )
-        //   ],
-        // ),
-        body: setBody(),
+        body: RefreshIndicator(onRefresh: fetchData, child: createListView()),
       ),
     );
   }

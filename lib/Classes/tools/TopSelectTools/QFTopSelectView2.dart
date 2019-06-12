@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class QFTopSelectView4 extends StatefulWidget {
- int selectIndex = 0;
-
-  QFTopSelectView4({
-    this.selectIndex,
-  });
-
+class QFTopSelectView2 extends StatefulWidget {
   @override
-  QFTopSelectView4State createState() => QFTopSelectView4State(
-        selectIndex: this.selectIndex,
-      );
+  QFTopSelectView2State createState() => QFTopSelectView2State();
 }
 
-class QFTopSelectView4State extends State<QFTopSelectView4> {
- int selectIndex = 0;
-
-  QFTopSelectView4State({
-    this.selectIndex,
-  });
+class QFTopSelectView2State extends State<QFTopSelectView2> {
+  int selectIndex = 0;
 
   GestureDetector getText(int index, String title) {
     bool isSelected = index == selectIndex;
@@ -36,12 +24,14 @@ class QFTopSelectView4State extends State<QFTopSelectView4> {
         }
       },
       child: new Text(
-        title,
+        "  " + title + "",
         style: TextStyle(
             fontSize: 14,
             fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
             color:
-                isSelected ? Color.fromARGB(255, 255, 46, 23) : Colors.white),
+                isSelected ? Color.fromARGB(255, 255, 46, 23) : Colors.white,
+                ),
+        overflow: TextOverflow.clip,
       ),
     );
   }
@@ -70,11 +60,36 @@ class QFTopSelectView4State extends State<QFTopSelectView4> {
             // mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              getText(0, "全部"),
-              getText(1, "经济"),
-              getText(2, "政治"),
-              getText(3, "社会"),
-              getText(4, "军事"),
+              getText(0, "新闻资讯"),
+              new Container(
+                padding: new EdgeInsets.all(0.0),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    getText(1, "数据调研"),
+                    Container(
+                      padding: const EdgeInsets.only(left: 5),
+                      child:
+                          Image.asset('lib/assets/images/sub_select_731.png'),
+                    )
+                  ],
+                ),
+              ),
+              new Container(
+                padding: new EdgeInsets.all(0.0),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    getText(2, "市场解读"),
+                    Container(
+                      padding: const EdgeInsets.only(left: 5),
+                      child:
+                          Image.asset('lib/assets/images/sub_select_731.png'),
+                    )
+                  ],
+                ),
+              ),
+              getText(3, "政策法规"),
             ],
           ),
         ),
@@ -85,6 +100,7 @@ class QFTopSelectView4State extends State<QFTopSelectView4> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return setTopSelectView();
   }
 }

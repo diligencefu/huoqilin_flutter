@@ -2,41 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class QFTopSelectView3 extends StatefulWidget {
- int selectIndex = 0;
-
-  QFTopSelectView3({
-    this.selectIndex,
-  });
 
   @override
-  QFTopSelectView3State createState() => QFTopSelectView3State(
-        selectIndex: this.selectIndex,
-      );
+  QFTopSelectView3State createState() => QFTopSelectView3State();
 }
 
 class QFTopSelectView3State extends State<QFTopSelectView3> {
  int selectIndex = 0;
 
-  QFTopSelectView3State({
-    this.selectIndex,
-  });
-
   GestureDetector getText(int index, String title) {
     bool isSelected = index == selectIndex;
 
-    if (index == 1 || index == 2) {
-      isSelected = false;
-    }
     return GestureDetector(
       onTap: () {
-        if (index != 1 && index != 2) {
           setState(() {
             selectIndex = index;
           });
-        }
       },
       child: new Text(
-        title,
+        "  "+title+"  ",
         style: TextStyle(
             fontSize: 14,
             fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,

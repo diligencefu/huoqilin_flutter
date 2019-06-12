@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:huoqilin_project/Classes/tools/FavoriteWidget.dart';
 
@@ -9,7 +10,7 @@ class QFZiXunInfo extends StatefulWidget {
 
 class _QFZiXunInfo extends State<QFZiXunInfo> {
   bool isFavorited = false;
-  int favoriteCount = 40;
+  // int favoriteCount = 40;
   ScrollController scrollController = ScrollController();
   double navAlpha = 0;
 
@@ -100,11 +101,11 @@ class _QFZiXunInfo extends State<QFZiXunInfo> {
           //     });
           //   },
           // ),
-          new Container(
-            padding: const EdgeInsets.only(left: 0.0),
-            child: new Text("$favoriteCount",
-                style: new TextStyle(color: Colors.grey)),
-          ),
+          // new Container(
+          //   padding: const EdgeInsets.only(left: 0.0),
+          //   child: new Text("$favoriteCount",
+          //       style: new TextStyle(color: Colors.grey)),
+          // ),
         ],
       ),
     );
@@ -179,7 +180,8 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
           height: 64,
           padding: EdgeInsets.fromLTRB(5, 12, 0, 0),
           child: GestureDetector(
-              onTap: back, child: Image.asset('lib/assets/images/pub_back_white.png')),
+              onTap: back,
+              child: Image.asset('lib/assets/images/pub_back_white.png')),
         ),
         Opacity(
           opacity: navAlpha,
@@ -192,7 +194,9 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
                 Container(
                   width: 40,
                   child: GestureDetector(
-                      onTap: back, child: Image.asset('lib/assets/images/pub_back_gray.png')),
+                      onTap: back,
+                      child:
+                          Image.asset('lib/assets/images/pub_back_gray.png')),
                 ),
                 Expanded(
                   child: Text(
@@ -242,13 +246,19 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
               child: new ListView(
                 padding: EdgeInsets.all(0),
                 controller: scrollController,
+                scrollDirection: Axis.vertical,
                 children: [
-                  // topSelect(),
+                  topSelect(),
                   new Image.asset(
                     'lib/assets/images/sky.jpg',
                     height: 240.0,
                     fit: BoxFit.cover,
                   ),
+                  // new Image.network(
+                  //   "http://img5.imgtn.bdimg.com/it/u=2458696988,2288615185&fm=26&gp=0.jpg",
+                  //   height: 200,
+                  //   fit: BoxFit.cover,
+                  // ),
                   titleScetion(),
                   buttonSection(),
                   textSection()

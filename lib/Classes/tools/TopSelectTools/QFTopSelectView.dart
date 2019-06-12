@@ -2,56 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class QFTopSelectView extends StatefulWidget {
-  final int selectIndex ;
+  final int _selectIndex;
 
-  QFTopSelectView({
-    this.selectIndex,
-  });
+  final ValueChanged<int> onChanged;
+  QFTopSelectView({Key key, int selectIndex, @required this.onChanged})
+      : this._selectIndex = selectIndex,
+        super(key: key) {}
 
   @override
-  QFTopSelectViewState createState() => QFTopSelectViewState(
-        selectIndex: this.selectIndex,
-      );
+  QFTopSelectViewState createState() => QFTopSelectViewState();
 }
 
 class QFTopSelectViewState extends State<QFTopSelectView> {
-  // final ValueChanged<bool> onChanged;
-  // QFTopSelectViewState({Key key, @required this.onChanged});
-
-  final int selectIndex ;
-  int currentIndex;
-
-  QFTopSelectViewState({
-    this.selectIndex,
-  });
-  
+  int currentIndex = 0;
   void initState() {
     super.initState();
-     currentIndex = selectIndex;
+    //  currentIndex = selectIndex;
   }
 
   GestureDetector getText(int index, String title) {
     bool isSelected = index == currentIndex;
-    // if (index == 0) {
-    //   isSelected = false;
-    // }
+
     return GestureDetector(
       onTap: () {
         setState(() {
           currentIndex = index;
-          // onChanged(false);
+          widget.onChanged(index);
         });
       },
       child: new Text(
-        title,
+        "  " + title + "",
         style: TextStyle(
             fontSize: 16,
             fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-            color: !isSelected
-                ? Color.fromARGB(255, 124, 212, 249)
-                : Colors.white),
+            color:
+                !isSelected ? Color.fromARGB(255, 124, 212, 249) : Colors.white),
+            // decoration: TextDecoration.none,
+            // decorationStyle: TextDecorationStyle.solid),
       ),
     );
+
   }
 
   Widget setTopSelectView() {
