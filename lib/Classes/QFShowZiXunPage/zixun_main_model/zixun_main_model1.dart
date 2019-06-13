@@ -6,7 +6,7 @@ class ZiXunMainModel1 {
      int qfId;
      int qfZXType;
      int qfProductId;
-     String qfIsCoverImg;
+     int qfIsCoverImg;
      int qfCoverImgType;
     
      String qfCoverImgUrl;
@@ -51,7 +51,11 @@ class ZiXunMainModel1 {
         qfTitle = json['Title'],
         qfAuthor = json['Author'],
         qfSummary = json['Summary'],
-        qfCreateTime = json['CreateTime'];
+        qfCreateTime = json['CreateTime'],
+        qfCoverImgType = json['CoverImgType'],
+        qfCoverImgUrl = json['CoverImgUrl'],
+        qfCoverImgUrl2 = json['CoverImgUrl2'],
+        qfCoverImgUrl3 = json['CoverImgUrl3'];
 
   Map<String, dynamic> toJson() => {
         'Id': qfId,
@@ -62,6 +66,11 @@ class ZiXunMainModel1 {
         'Author': qfAuthor,
         'Summary': qfSummary,
         'CreateTime': qfCreateTime,
+        'CoverImgType': qfCoverImgType,
+        'CoverImgUrl': qfCoverImgUrl,
+        'CoverImgUrl2': qfCoverImgUrl2,
+        'CoverImgUrl3': qfCoverImgUrl3,
+        // 'CreateTime': qfCreateTime,
       };
 
   @override
@@ -75,6 +84,10 @@ class ZiXunMainModel1 {
     sb.write(",\"Author\":\"$qfAuthor\"");
     sb.write(",\"Summary\":\"$qfSummary\"");
     sb.write(",\"CreateTime\":\"$qfCreateTime\"");
+    sb.write(",\"CoverImgType\":\"$qfCoverImgType\"");
+    sb.write(",\"CoverImgUrl\":\"$qfCoverImgUrl\"");
+    sb.write(",\"CoverImgUrl2\":\"$qfCoverImgUrl2\"");
+    sb.write(",\"CoverImgUrl3\":\"$qfCoverImgUrl3\"");
     sb.write('}');
     return sb.toString();
   }

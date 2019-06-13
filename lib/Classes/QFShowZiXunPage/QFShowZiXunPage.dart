@@ -40,7 +40,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   // 源数据存放数组
   List<ZiXunMainModel1> modules = [];
   // 顶部自选栏当前选中的下标
-  int selectIndex;
+  int selectIndex = 0;
   // 模块id
   String _bloack_id = "9";
   // 产品id
@@ -102,19 +102,22 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   // }
 
   Future<void> fetchData() async {
+
+    int pageSize = 20;
     Map<String, String> map = new Map();
     map["userNo"] = UserInfo.userNo;
     map["pageIndex"] = "1";
-    map["pageSize"] = "20";
+    map["pageSize"] = "$pageSize";
     map["pageIndex"] = "1";
     map["productId"] = _product_id;
     map["blockId"] = _bloack_id;
     map["isFollow"] = _is_follow;
     Request.get(QFZiXunApis.ZIXUNGetInformationList, map, (datas) {
-      if (datas != null) {
+      if (datas!= null) {
         // datas.toString();
-        List moduleData = datas["DataList"];
-        final pages = datas["TotalCount"];
+        var jsonData = json.decode(datas);
+        List moduleData = jsonData["DataList"];
+        final pages = jsonData["TotalCount"]/pageSize;
         if (currentPage == 1) {
           modules.clear();
         }
@@ -418,9 +421,10 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(3),
                     child: Image.network(
-                      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560408914897&di=758d66268b36edeeea7d9ce4e6f5dacb&imgtype=0&src=http%3A%2F%2Fnews.sfacg.com%2FImages%2FInner%2F2016%2F4%2F21%2Fbeb069a3-9a75-49d8-8385-c16caed662fd.jpg",
+                      model.qfCoverImgUrl,
                       fit: BoxFit.cover,
                       height: 90,
+                      
                     ),
                   ),
                 )
@@ -593,21 +597,10 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
         var model = modules[index];
         if (_is_news) {
           return createNewsListCell(model);
-
-          // if (model.id == 2) {
-          //   return createNewsListCell(model);
-          // } else {
-          //   // return createListCell2();
-          //   return Column(
-          //     children: <Widget>[
-          //       createNewListCellHead(),
-          //       createNewsListCell(model),
-          //     ],
-          //   );
-          // }
         } else {
-          if (model.qfIsCoverImg == "1") {
-            if (model.qfCoverImgType == "2") {
+          if (model.qfIsCoverImg == 1) {
+            var type = model.qfCoverImgType;
+            if (type == 2) {
               return createListCellWithOneImage(model);
             } else {
               return createListCellWithOThreeImages(model);
