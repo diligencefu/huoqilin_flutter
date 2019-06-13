@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:huoqilin_project/Classes/tools/FavoriteWidget.dart';
+import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
 
 class QFZiXunInfo extends StatefulWidget {
+  ZiXunMainModel1 model;
+  QFZiXunInfo(this.model);
   @override
   _QFZiXunInfo createState() => _QFZiXunInfo();
 }
@@ -13,10 +16,9 @@ class _QFZiXunInfo extends State<QFZiXunInfo> {
   // int favoriteCount = 40;
   ScrollController scrollController = ScrollController();
   double navAlpha = 0;
-
   Column buildButtonColumn(IconData icon, String label) {
-    Color color = Theme.of(context).primaryColor;
 
+    Color color = Theme.of(context).primaryColor;
     return new Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
