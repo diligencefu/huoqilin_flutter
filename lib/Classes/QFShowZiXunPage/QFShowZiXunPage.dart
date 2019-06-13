@@ -17,15 +17,31 @@ import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_
 
 // import 'package:base_library/base_library.dart';
 
+enum HomeListType {
+  excellent,
+  male,
+  female,
+  cartoon,
+}
+
 class QFShowZiXunPage extends StatefulWidget {
   @override
   _QFShowZiXunPage createState() => _QFShowZiXunPage();
 }
 
 class _QFShowZiXunPage extends State<QFShowZiXunPage> {
+  // 源数据存放数组
   List<ZiXunMainModel1> modules = [];
-
+  // 顶部自选栏当前选中的下标
   int selectIndex;
+  // 模块id
+  String _bloack_id = "9";
+  // 产品id
+  String _product_id = "0";
+  // 是否是关注的类型
+  String _is_follow = "0";
+  // 是否是新闻类型
+  bool _is_news = true;
 
   @override
   void initState() {
@@ -35,9 +51,30 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   }
 
   void _getCallBack(int value) {
-    print(value);
+    // print(value);
 
     setState(() {
+      _is_news = false;
+      _is_follow = "0";
+      switch (value) {
+        case 0:
+        case 2:
+          _is_news = true;
+          _bloack_id = "9";
+          if (value == 2) {
+            _is_follow = "1";
+          }
+          break;
+        case 1:
+          _bloack_id = "1";
+          break;
+        case 3:
+          _bloack_id = "0";
+          break;
+        default:
+          break;
+      }
+      fetchData();
       selectIndex = value;
     });
   }
@@ -58,7 +95,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   // }
 
   Future<void> fetchData() async {
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < 5; i++) {
       var model = ZiXunMainModel1();
       model.title = "sdasdas";
       if (i % 3 == 0) {
@@ -80,6 +117,13 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
 
       modules.add(model);
     }
+
+    setState(() {
+      // modules;
+    });
+    print("bloack_id:" + _bloack_id);
+    print("is_follow:" + _is_follow);
+    print("is_news:" + "$_is_news");
     // try {
     //   var responseJson = await Request.get(action: "/News/GetTypeList");
     //   List moduleData = responseJson['DataList'];
@@ -101,18 +145,84 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       onChanged: _getCallBack,
       selectIndex: 0,
     );
-    print(selectIndex);
+    // print(selectIndex);
     Widget showView;
     switch (selectIndex) {
       case 0:
       case 2:
-        showView = QFTopSelectView2();
+        showView = QFTopSelectView2(
+          onChanged: (int value) {
+            switch (value) {
+              case 0:
+                _bloack_id = "9";
+                break;
+              case 1:
+                // _bloack_id = "2";
+                break;
+              case 2:
+                // _bloack_id = "9";
+                break;
+              case 3:
+                _bloack_id = "11";
+                break;
+              default:
+                break;
+            }
+            fetchData();
+          },
+        );
         break;
       case 1:
-        showView = QFTopSelectView3();
+        showView = QFTopSelectView3(
+          onChanged: (int value) {
+            switch (value) {
+              case 0:
+                _bloack_id = "1";
+                break;
+              case 1:
+                _bloack_id = "2";
+                break;
+              case 2:
+                _bloack_id = "9";
+                break;
+              case 3:
+                _bloack_id = "12";
+                break;
+              default:
+                break;
+            }
+            fetchData();
+          },
+        );
         break;
       default:
-        showView = QFTopSelectView4();
+        showView = QFTopSelectView4(
+          onChanged: (int value) {
+            switch (value) {
+              case 0:
+                _bloack_id = "0";
+                break;
+              case 1:
+                _bloack_id = "13";
+                break;
+              case 2:
+                _bloack_id = "14";
+                break;
+              case 3:
+                _bloack_id = "15";
+                break;
+              case 4:
+                _bloack_id = "16";
+                break;
+              case 5:
+                _bloack_id = "17";
+                break;
+              default:
+                break;
+            }
+            fetchData();
+          },
+        );
     }
     return Column(
       children: <Widget>[
@@ -122,25 +232,165 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     );
   }
 
-// Color.fromARGB(255, 197, 215, 242)
-  Widget createListCell1(ZiXunMainModel1 model) {
+  Widget createListCellWithOneImage(ZiXunMainModel1 model) {
     return Container(
-      // height: double.infinity,
-      child: Row(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        height: 115,
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                        height: 82,
+                        child: Text(
+                          model.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Color.fromARGB(255, 39, 48, 62)),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        alignment: Alignment.bottomLeft,
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              "2019-06-05",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 52, 120, 245)),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Text(
+                                "农业农村部",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 178, 185, 210)),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  height: 90,
+                  width: 115,
+                  child: Image.network(
+                    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560408914897&di=758d66268b36edeeea7d9ce4e6f5dacb&imgtype=0&src=http%3A%2F%2Fnews.sfacg.com%2FImages%2FInner%2F2016%2F4%2F21%2Fbeb069a3-9a75-49d8-8385-c16caed662fd.jpg",
+                    fit: BoxFit.cover,
+                    height: 90,
+                  ),
+                )
+              ],
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 1.0,
+                    color: Color.fromARGB(255, 230, 238, 245),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
+  }
+
+  Widget createListCellNoImages(ZiXunMainModel1 model) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            alignment: Alignment.center,
-            width: 30,
-            color: Colors.red,
-
-            height: double.infinity,
-            // child: Container(
-            //   // height: double.infinity,
-            //   width: 1,
-            //   color: Colors.red,
-            //   // height: 33,
-            // )
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+            child: Text(
+              model.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromARGB(255, 39, 48, 62)),
+            ),
           ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
+            child: Text(
+              model.url,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                        color: Color.fromARGB(255, 130, 142, 166)),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  "2019-06-05",
+                  style: TextStyle(
+                      fontSize: 14, color: Color.fromARGB(255, 52, 120, 245)),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    "农业农村部",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Color.fromARGB(255, 178, 185, 210)),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: 1.0,
+                  color: Color.fromARGB(255, 230, 238, 245),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+// Color.fromARGB(255, 197, 215, 242)
+  Widget createNewsListCell(ZiXunMainModel1 model) {
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0),
+      padding: const EdgeInsets.only(left: 15.0),
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            color: Color.fromARGB(255, 197, 215, 242),
+          ),
+        ),
+      ),
+      child: Row(
+        children: <Widget>[
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +400,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   child: Text(
                     "14:38",
                     style: TextStyle(
-                        fontSize: 12, color: Color.fromARGB(255, 52, 125, 235)),
+                        fontSize: 13, color: Color.fromARGB(255, 52, 102, 215)),
                   ),
                 ),
                 Container(
@@ -166,15 +416,15 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 16, 12),
+                  padding: const EdgeInsets.fromLTRB(0, 12, 16, 12),
                   child: Text(
                     model.url,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.normal,
-                        color: Color.fromARGB(255, 115, 130, 144)),
+                        color: Color.fromARGB(255, 130, 142, 166)),
                   ),
                 ),
               ],
@@ -185,7 +435,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     );
   }
 
-  Widget createListCell2() {
+  Widget createNewListCellHead() {
     return Container(
       padding: const EdgeInsets.only(left: 11),
       child: Row(
@@ -197,7 +447,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                 style: TextStyle(
                   color: Color.fromARGB(255, 16, 101, 230),
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 )),
           )
         ],
@@ -210,17 +460,32 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       itemCount: modules.length,
       itemBuilder: (context, index) {
         var model = modules[index];
-        // return Container(
-        //   child: Column(
-        //     children: <Widget>[
-
-        //     ],
-        //   ),
-        // );
-        if (model.id == 2) {
-          return createListCell1(model);
+        if (_is_news) {
+          if (model.id == 2) {
+            return createNewsListCell(model);
+          } else {
+            // return createListCell2();
+            return Column(
+              children: <Widget>[
+                createNewListCellHead(),
+                createNewsListCell(model),
+              ],
+            );
+          }
         } else {
-          return createListCell2();
+          if (selectIndex == 1) {
+            return createListCellNoImages(model);
+          } else {
+            return createListCellWithOneImage(model);
+          }
+
+          // if (selectIndex == 1) {
+          //   return createListCellNoImages(model);
+          // }else if (selectIndex == 1) {
+
+          // }else{
+
+          // }
         }
       },
     );

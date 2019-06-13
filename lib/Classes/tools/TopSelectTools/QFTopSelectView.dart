@@ -30,18 +30,35 @@ class QFTopSelectViewState extends State<QFTopSelectView> {
           widget.onChanged(index);
         });
       },
-      child: new Text(
-        "  " + title + "",
-        style: TextStyle(
-            fontSize: 16,
-            fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-            color:
-                !isSelected ? Color.fromARGB(255, 124, 212, 249) : Colors.white),
-            // decoration: TextDecoration.none,
-            // decorationStyle: TextDecorationStyle.solid),
-      ),
+      child: new Container(
+          alignment: Alignment.bottomCenter,
+          height: 31,
+          child: Column(
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight:
+                        isSelected ? FontWeight.w500 : FontWeight.normal,
+                    color: !isSelected
+                        ? Color.fromARGB(255, 124, 212, 249)
+                        : Colors.white),
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 6),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Container(
+                    width: 26,
+                    height: 3,
+                    color: isSelected ? Colors.white : Colors.transparent,
+                  ),
+                ),
+              )
+            ],
+          )),
     );
-
   }
 
   Widget setTopSelectView() {
@@ -50,7 +67,7 @@ class QFTopSelectViewState extends State<QFTopSelectView> {
         Container(
           height: 45,
           padding: EdgeInsets.all(0.0),
-          alignment: Alignment.topCenter,
+          alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
@@ -64,6 +81,7 @@ class QFTopSelectViewState extends State<QFTopSelectView> {
         ),
         Container(
           height: 45,
+          alignment: Alignment.bottomCenter,
           child: Row(
             // mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -75,7 +93,7 @@ class QFTopSelectViewState extends State<QFTopSelectView> {
                   children: <Widget>[
                     getText(0, "自选"),
                     Container(
-                      padding: const EdgeInsets.only(left: 5),
+                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 10),
                       child: Image.asset(
                           'lib/assets/images/other_zong_unselect.png'),
                     )

@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class QFTopSelectView3 extends StatefulWidget {
+  final int _selectIndex;
+
+  final ValueChanged<int> onChanged;
+  QFTopSelectView3({Key key, int selectIndex, @required this.onChanged})
+      : this._selectIndex = selectIndex,
+        super(key: key) {}
 
   @override
   QFTopSelectView3State createState() => QFTopSelectView3State();
@@ -17,6 +23,7 @@ class QFTopSelectView3State extends State<QFTopSelectView3> {
       onTap: () {
           setState(() {
             selectIndex = index;
+            widget.onChanged(index);
           });
       },
       child: new Text(

@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class QFTopSelectView2 extends StatefulWidget {
+  final int _selectIndex;
+
+  final ValueChanged<int> onChanged;
+  QFTopSelectView2({Key key, int selectIndex, @required this.onChanged})
+      : this._selectIndex = selectIndex,
+        super(key: key) {}
+
   @override
   QFTopSelectView2State createState() => QFTopSelectView2State();
 }
@@ -20,17 +27,17 @@ class QFTopSelectView2State extends State<QFTopSelectView2> {
         if (index != 1 && index != 2) {
           setState(() {
             selectIndex = index;
+            widget.onChanged(index);
           });
         }
       },
       child: new Text(
         "  " + title + "",
         style: TextStyle(
-            fontSize: 14,
-            fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-            color:
-                isSelected ? Color.fromARGB(255, 255, 46, 23) : Colors.white,
-                ),
+          fontSize: 14,
+          fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
+          color: isSelected ? Color.fromARGB(255, 255, 46, 23) : Colors.white,
+        ),
         overflow: TextOverflow.clip,
       ),
     );
