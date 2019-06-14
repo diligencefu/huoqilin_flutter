@@ -27,9 +27,9 @@ class QFTopSelectView2State extends State<QFTopSelectView2> {
         if (index != 1 && index != 2) {
           setState(() {
             selectIndex = index;
-            widget.onChanged(index);
           });
         }
+        widget.onChanged(index);
       },
       child: new Text(
         "  " + title + "",

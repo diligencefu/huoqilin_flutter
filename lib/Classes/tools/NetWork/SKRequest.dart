@@ -26,6 +26,7 @@ class Request {
         callBack(res.body);
       }
     } catch (exception) {
+      print(exception.toString());
       if (errorBack != null) {
         errorBack(exception);
       }

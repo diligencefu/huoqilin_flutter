@@ -52,6 +52,9 @@ class ZiXunMainModel1 {
         qfAuthor = json['Author'],
         qfSummary = json['Summary'],
         qfCreateTime = json['CreateTime'],
+        qfCreateTime1 = json['CreateTime'].toString().substring(0,10),
+        qfCreateTime2 = json['CreateTime'].toString().substring(11).toString().substring(0,5),
+        
         qfCoverImgType = json['CoverImgType'],
         qfCoverImgUrl = json['CoverImgUrl'],
         qfCoverImgUrl2 = json['CoverImgUrl2'],
@@ -66,6 +69,8 @@ class ZiXunMainModel1 {
         'Author': qfAuthor,
         'Summary': qfSummary,
         'CreateTime': qfCreateTime,
+        'CreateTime1': qfCreateTime1,
+        'CreateTime2': qfCreateTime2,
         'CoverImgType': qfCoverImgType,
         'CoverImgUrl': qfCoverImgUrl,
         'CoverImgUrl2': qfCoverImgUrl2,
