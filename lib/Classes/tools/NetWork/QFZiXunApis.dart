@@ -7,6 +7,9 @@ class QFZiXunApis {
   static const String ZIXUNGetTypeList = kBaseUrl+"/News/GetTypeList";
   static const String ZIXUNGetInformationList = kBaseUrl+"/News/GetInformationList";
 
+  static const String ZIXUNGetProductListByTypeId = kBaseUrl+"/News/GetProductListByTypeId";
+
+  static const String ZIXUNProductFollowProduct = kBaseUrl+"/News/FollowProduct";
 
 
   static String getPath({String path: '', int page, String resType: 'json'}) {

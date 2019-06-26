@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:huoqilin_project/Classes/QFShowZiXunPage/QFZiXunInfo.dart';
+import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_show_product_model.dart';
 import 'package:huoqilin_project/Classes/tools/NetWork/common.dart';
 import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView.dart';
 import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView2.dart';
@@ -22,6 +24,15 @@ import 'package:huoqilin_project/Classes/tools/NetWork/SKRequest.dart';
 import 'package:huoqilin_project/Classes/tools/screen.dart' as prefix2;
 import 'package:huoqilin_project/Classes/tools/user_info_cache/user_info.dart';
 
+import 'package:huoqilin_project/Classes/tools/loading_view/loading_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
+
+import 'package:easy_listview/easy_listview.dart';
+import 'choose_product_news/qf_show_products_page.dart';
+import 'zixun_article_detail_page.dart';
+import 'show_web_info_page.dart';
 // import 'package:flustars/flustars.dart';
 // import 'package:common_utils/common_utils.dart';
 
@@ -57,12 +68,29 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   var _last_new_date = "";
 // 需要显示的垂直采单类型
   int _muneType = 1;
+  int type2Select_index = 0;
 
+  bool isnomore = false;
+  bool isLoading = false;
+  ScrollController scrollController = ScrollController();
+
+  SpotTypes selectModel;
   @override
   void initState() {
     super.initState();
+
+    Map<String, dynamic> map = new Map();
+    map["Id"] = 0;
+    map["TypeName"] = "自选";
+
+    selectModel = SpotTypes.fromJson(map);
+
     fetchData();
-    // getTypeList();
+    scrollController.addListener(() {
+      setState(() {
+        _muneType = 1;
+      });
+    });
   }
 
   void _getCallBack(int value) {
@@ -72,6 +100,20 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     _last_new_date = "";
     switch (value) {
       case 0:
+        Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => new QFShowProductNewsPage(
+                    onChanged: (SpotTypes product) {
+                      selectModel = product;
+                      _product_id = product.id.toString();
+                      refrenshData();
+                      selectIndex = value;
+                      _is_news = true;
+                    },
+                  )),
+        );
+        return;
       case 2:
         _is_news = true;
         _bloack_id = "9";
@@ -88,34 +130,34 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       default:
         break;
     }
+
+    Map<String, dynamic> map = new Map();
+    map["Id"] = 0;
+    map["TypeName"] = "自选";
+
+    selectModel = SpotTypes.fromJson(map);
+
     refrenshData();
-
-    setState(() {
-      selectIndex = value;
-    });
+    selectIndex = value;
   }
-
-  // Future<List<ZiXunMainModel1>> getTypeList() async {
-  //   BaseResp<List> baseResp = await DioUtil().request<List>(
-  //       Method.get, QFZiXunApis.getPath(path: QFZiXunApis.ZIXUNGetTypeList));
-  //   List<ZiXunMainModel1> bannerList;
-  //   if (baseResp.code != Constant.status_success) {
-  //     return new Future.error(baseResp.msg);
-  //   }
-  //   if (baseResp.data != null) {
-  //     bannerList = baseResp.data.map((value) {
-  //       return ZiXunMainModel1.fromJson(value);
-  //     }).toList();
-  //   }
-  //   return bannerList;
-  // }
 
   Future<void> refrenshData() async {
     currentPage = 1;
     fetchData();
+    // GlobalVariable.showCenterShortToast("Begin refresh");
+  }
+
+  Future<void> footLoadMoreData() async {
+    currentPage++;
+    fetchData();
   }
 
   Future<void> fetchData() async {
+    if (isLoading) {
+      return;
+    }
+    isLoading = true;
+    setState(() {});
     if (currentPage == 1) {
       _last_new_date = "";
     }
@@ -124,18 +166,26 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     map["userNo"] = UserInfo.userNo;
     map["pageIndex"] = "$currentPage";
     map["pageSize"] = "$pageSize";
-    map["pageIndex"] = "1";
     map["productId"] = _product_id;
     map["blockId"] = _bloack_id;
     map["isFollow"] = _is_follow;
     Request.get(QFZiXunApis.ZIXUNGetInformationList, map, (datas) {
+      isLoading = false;
       if (datas != null) {
         // datas.toString();
         var jsonData = json.decode(datas);
         List moduleData = jsonData["DataList"];
-        final pages = jsonData["TotalCount"] / pageSize;
+        var pages = jsonData["TotalCount"] / pageSize;
+        if (jsonData["TotalCount"] % pageSize > 0) {
+          pages = pages + 1;
+        }
         if (currentPage == 1) {
           modules.clear();
+        }
+        if (pages == currentPage) {
+          isnomore = true;
+        } else {
+          isnomore = false;
         }
         moduleData.forEach((data) {
           modules.add(ZiXunMainModel1.fromJson(data));
@@ -146,53 +196,13 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       }
       print(datas);
     });
-
-    // for (var i = 0; i < 5; i++) {
-    //   var model = ZiXunMainModel1();
-    //   model.title = "sdasdas";
-    //   if (i % 3 == 0) {
-    //     model.id = 1;
-    //   } else {
-    //     model.id = 2;
-    //   }
-
-    //   if (i % 2 == 0) {
-    //     model.title = "理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨";
-    //     model.url =
-    //         "理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨";
-    //   } else {
-    //     model.title = "理费价着大豆价格上涨";
-    //     model.url = "着大豆价格上涨理费价格随着大豆价格上涨理费价格随着大豆价格上涨";
-    //   }
-
-    //   model.imagePath = "ss";
-
-    //   modules.add(model);
-    // }
-
-    // print("bloack_id:" + _bloack_id);
-    // print("is_follow:" + _is_follow);
-    // print("is_news:" + "$_is_news");
-    // try {
-    //   var responseJson = await Request.get(action: "/News/GetTypeList");
-    //   List moduleData = responseJson['DataList'];
-    //   List<String> modules = [];
-    //   moduleData.forEach((data) {
-    //     modules.add("sasdadas");
-    //   });
-
-    //   setState(() {
-    //     this.modules = modules;
-    //   });
-    // } catch (e) {
-    //   // Toast.show(e.toString());
-    // }
   }
 
   Widget setBody() {
     QFTopSelectView topSelect = QFTopSelectView(
       onChanged: _getCallBack,
       selectIndex: 0,
+      selectModel: selectModel,
     );
     // print(selectIndex);
     Widget showView;
@@ -200,12 +210,14 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       case 0:
       case 2:
         showView = QFTopSelectView2(
+          selectIndex: type2Select_index,
           onChanged: (int value) {
             _muneType = 1;
             switch (value) {
               case 0:
                 _is_news = true;
                 _bloack_id = "9";
+                type2Select_index = 0;
                 refrenshData();
                 break;
               case 1:
@@ -223,6 +235,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
               case 3:
                 _bloack_id = "11";
                 _is_news = false;
+                type2Select_index = 0;
                 refrenshData();
                 break;
               default:
@@ -321,11 +334,13 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                 Container(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(3),
-                    child: Image.network(
-                      model.qfCoverImgUrl,
-                      fit: BoxFit.cover,
-                      height: 100,
+                    child: CachedNetworkImage(
+                      imageUrl: model.qfCoverImgUrl,
+                      placeholder: (context, url) =>
+                          GlobalVariable.getPicPlaceHolder(),
                       width: width / 3,
+                      height: 100,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -333,11 +348,13 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   padding: const EdgeInsets.only(left: 12),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(3),
-                    child: Image.network(
-                      model.qfCoverImgUrl2,
-                      fit: BoxFit.cover,
-                      height: 100,
+                    child: CachedNetworkImage(
+                      imageUrl: model.qfCoverImgUrl2,
+                      placeholder: (context, url) =>
+                          GlobalVariable.getPicPlaceHolder(),
                       width: width / 3,
+                      height: 100,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -345,11 +362,13 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   padding: const EdgeInsets.only(left: 12),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(3),
-                    child: Image.network(
-                      model.qfCoverImgUrl3,
-                      fit: BoxFit.cover,
-                      height: 100,
+                    child: CachedNetworkImage(
+                      imageUrl: model.qfCoverImgUrl3,
+                      placeholder: (context, url) =>
+                          GlobalVariable.getPicPlaceHolder(),
                       width: width / 3,
+                      height: 100,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 )
@@ -406,7 +425,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 6, 8, 8),
                         height: 82,
                         child: Text(
                           model.qfTitle,
@@ -419,7 +438,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                         alignment: Alignment.bottomLeft,
                         child: Row(
                           children: <Widget>[
@@ -448,14 +467,18 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                 ),
                 Container(
                   alignment: Alignment.center,
+                  padding: EdgeInsets.only(bottom: 6),
                   height: 90,
                   width: 115,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(3),
-                    child: Image.network(
-                      model.qfCoverImgUrl,
-                      fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      imageUrl: model.qfCoverImgUrl,
+                      placeholder: (context, url) =>
+                          GlobalVariable.getPicPlaceHolder(),
                       height: 90,
+                      width: 115,
+                      fit: BoxFit.fill,
                     ),
                   ),
                 )
@@ -621,38 +644,101 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     );
   }
 
+// WidgetBuilder footBiulder(){
+//   return WidgetBuilder(
+//     context
+//   );
+// }
+
+  Widget addTapAction(ZiXunMainModel1 model, Widget cell) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new QFZiXunArticleDetailPage(model)));
+      },
+      child: cell,
+    );
+  }
+
   Widget createListView() {
-    return ListView.builder(
-      itemCount: modules.length,
+    return EasyListView(
+      isSliverMode: false,
+      // footerBuilder: footBiulder(),
       itemBuilder: (context, index) {
         var model = modules[index];
         if (_is_news) {
-          if (_last_new_date == "" || _last_new_date != model.qfCreateTime1 || index == 0) {
+          if (_last_new_date == "" ||
+              _last_new_date != model.qfCreateTime1 ||
+              index == 0) {
             _last_new_date = model.qfCreateTime1;
             return Column(
               children: <Widget>[
-                createNewListCellHead(model),
-                createNewsListCell(model)
+                addTapAction(model, createNewListCellHead(model)),
+                addTapAction(model, createNewsListCell(model)),
               ],
             );
           } else {
-            return createNewsListCell(model);
+            return addTapAction(model, createNewsListCell(model));
           }
         } else {
           if (model.qfIsCoverImg == 1) {
             var type = model.qfCoverImgType;
             if (model.qfCoverImgUrl3.toString() == "null" ||
                 model.qfCoverImgUrl3.toString() == "") {
-              return createListCellWithOneImage(model);
+              return addTapAction(model, createListCellWithOneImage(model));
             } else {
-              return createListCellWithOThreeImages(model);
+              return addTapAction(model, createListCellWithOThreeImages(model));
             }
           } else {
-            return createListCellNoImages(model);
+            return addTapAction(model, createListCellNoImages(model));
           }
         }
       },
+      itemCount: modules.length,
+      loadMore: !isnomore,
+      loadMoreWhenNoData: false,
+      onLoadMore: () {
+        footLoadMoreData();
+      },
+      // headerBuilder: ,
     );
+
+    // return ListView.builder(
+    //   itemCount: modules.length,
+    //   controller: scrollController,
+    //   itemBuilder: (context, index) {
+    //     var model = modules[index];
+    //     if (_is_news) {
+    //       if (_last_new_date == "" ||
+    //           _last_new_date != model.qfCreateTime1 ||
+    //           index == 0) {
+    //         _last_new_date = model.qfCreateTime1;
+    //         return Column(
+    //           children: <Widget>[
+    //             createNewListCellHead(model),
+    //             createNewsListCell(model)
+    //           ],
+    //         );
+    //       } else {
+    //         return createNewsListCell(model);
+    //       }
+    //     } else {
+    //       if (model.qfIsCoverImg == 1) {
+    //         var type = model.qfCoverImgType;
+    //         if (model.qfCoverImgUrl3.toString() == "null" ||
+    //             model.qfCoverImgUrl3.toString() == "") {
+    //           return createListCellWithOneImage(model);
+    //         } else {
+    //           return createListCellWithOThreeImages(model);
+    //         }
+    //       } else {
+    //         return createListCellNoImages(model);
+    //       }
+    //     }
+    //   },
+    // );
   }
 
   Widget createVerticalSub(String title) {
@@ -687,10 +773,22 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   }
 
   tapHangView(int index) {
+    if (index > 3) {
+      type2Select_index = 1;
+    } else {
+      type2Select_index = 2;
+    }
     _is_news = false;
     switch (index) {
       case 4:
-        print("宏观数据——国内");
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+              builder: (context) => new QFWebView(
+                    "https://www.qfsctech.com/8085/News/MacroData?tag=ios",
+                    "宏观数据 - 国内",
+                  ),
+            ));
         break;
       case 5:
         print("产业数据+产品id");
@@ -713,9 +811,10 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
         break;
       default:
     }
-    setState(() {
-      _muneType = 1;
-    });
+    _muneType = 1;
+
+    // setState(() {
+    // });
   }
 
   List<Widget> createVerticalmuneList() {
@@ -778,24 +877,53 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     );
   }
 
-  Widget showView() {
-    double width = Screen.width / 2;
+  List<Widget> getChildren() {
     if (_muneType == 1) {
-      return RefreshIndicator(onRefresh: refrenshData, child: createListView());
+      if (isLoading) {
+        return <Widget>[
+          RefreshIndicator(onRefresh: refrenshData, child: createListView()),
+          LoadingDialog(
+            text: "",
+          )
+        ];
+      } else {
+        return <Widget>[
+          RefreshIndicator(onRefresh: refrenshData, child: createListView()),
+        ];
+      }
     } else {
+      double width = Screen.width / 2;
+
       if (_muneType == 2) {
         width = Screen.width / 4;
       }
-      return Stack(
-        children: <Widget>[
+      if (isLoading) {
+        return <Widget>[
           RefreshIndicator(onRefresh: refrenshData, child: createListView()),
           Container(
             padding: EdgeInsets.fromLTRB(width, 0.0, 0, 0),
             child: createVerticalmune1(),
-          )
-        ],
-      );
+          ),
+          LoadingDialog(
+            text: "",
+          ),
+        ];
+      } else {
+        return <Widget>[
+          RefreshIndicator(onRefresh: refrenshData, child: createListView()),
+          Container(
+            padding: EdgeInsets.fromLTRB(width, 0.0, 0, 0),
+            child: createVerticalmune1(),
+          ),
+        ];
+      }
     }
+  }
+
+  Widget showView() {
+    return Stack(
+      children: getChildren(),
+    );
   }
 
   @override
@@ -817,10 +945,11 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   icon: Image.asset(
                       'lib/assets/images/search_icon_infomation.png'),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => new QFZiXunInfo(null)));
+                    GlobalVariable.setToast("搜索");
+                    // Navigator.push(
+                    //     context,
+                    //     new MaterialPageRoute(
+                    //         builder: (context) => new QFZiXunInfo(null)));
                   },
                 )
               ],

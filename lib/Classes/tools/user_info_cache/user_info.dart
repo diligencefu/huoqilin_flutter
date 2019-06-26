@@ -1,3 +1,3 @@
 class UserInfo {
-  static String userNo = "Test8";
+  static String userNo = "test8";
 }

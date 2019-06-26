@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class QFTopSelectView2 extends StatefulWidget {
-  final int _selectIndex;
+  int selectIndex;
 
   final ValueChanged<int> onChanged;
   QFTopSelectView2({Key key, int selectIndex, @required this.onChanged})
-      : this._selectIndex = selectIndex,
-        super(key: key) {}
+      : this.selectIndex = selectIndex,
+        super(key: key);
 
   @override
   QFTopSelectView2State createState() => QFTopSelectView2State();
@@ -15,19 +15,33 @@ class QFTopSelectView2 extends StatefulWidget {
 
 class QFTopSelectView2State extends State<QFTopSelectView2> {
   int selectIndex = 0;
+  bool can_change = false;
 
   GestureDetector getText(int index, String title) {
     bool isSelected = index == selectIndex;
 
     if (index == 1 || index == 2) {
-      isSelected = false;
+      if (!can_change) {
+        isSelected = false;
+      }
     }
+
     return GestureDetector(
       onTap: () {
+        if (can_change) {
+          if (index == 1 || index == 2) {
+            setState(() {
+              selectIndex = index;
+              can_change = false;
+            });
+          }
+        }
         if (index != 1 && index != 2) {
           setState(() {
             selectIndex = index;
+            this.widget.selectIndex = 0;
           });
+          can_change = false;
         }
         widget.onChanged(index);
       },
@@ -107,7 +121,10 @@ class QFTopSelectView2State extends State<QFTopSelectView2> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
+    if (this.widget.selectIndex != 0) {
+      selectIndex = this.widget.selectIndex;
+      can_change = true;
+    }
     return setTopSelectView();
   }
 }

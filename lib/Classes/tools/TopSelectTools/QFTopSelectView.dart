@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_show_product_model.dart';
 class QFTopSelectView extends StatefulWidget {
   final int _selectIndex;
+  final SpotTypes _selectModel;
 
   final ValueChanged<int> onChanged;
-  QFTopSelectView({Key key, int selectIndex, @required this.onChanged})
+  QFTopSelectView({Key key, int selectIndex,SpotTypes selectModel, @required this.onChanged})
       : this._selectIndex = selectIndex,
+      this._selectModel = selectModel,
         super(key: key) {}
 
   @override
@@ -91,7 +93,7 @@ class QFTopSelectViewState extends State<QFTopSelectView> {
                 child: new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    getText(0, "自选"),
+                    getText(0, this.widget._selectModel.typeName),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 0, 0, 10),
                       child: Image.asset(
