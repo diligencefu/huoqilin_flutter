@@ -73,14 +73,14 @@ class QFWebView extends StatelessWidget {
         // FlutterNativeWeb(
         //   onWebCreated: onWebCreated,
         // ),
-        // WebView(
-        //     debuggingEnabled: true,
-        //     key: UniqueKey(),
-        //     javascriptMode: JavascriptMode.unrestricted,
-        //     initialUrl: "https://www.baidu.com",
-        //     onPageFinished: (url){
-        //       GlobalVariable.setToast(url);
-        //     },),
+        WebView(
+            debuggingEnabled: true,
+            key: UniqueKey(),
+            javascriptMode: JavascriptMode.unrestricted,
+            initialUrl: "https://www.baidu.com",
+            onPageFinished: (url){
+              GlobalVariable.setToast(url);
+            },),
         buildNavigationBar(),
       ],
     );
