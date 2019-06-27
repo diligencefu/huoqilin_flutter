@@ -3,9 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:huoqilin_project/Classes/tools/FavoriteWidget.dart';
 import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-
-import 'package:flutter_html/flutter_html.dart';
 
 // import 'webview_scaffold.dart';
 class QFZiXunArticleDetailPage extends StatefulWidget {
@@ -104,7 +101,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
-    return new Scaffold(
+    return   Scaffold(
       appBar: PreferredSize(
         child: Container(
           child: AppBar(
@@ -121,8 +118,8 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
             //   onPressed: () {
             //     // Navigator.push(
             //     //     context,
-            //     //     new MaterialPageRoute(
-            //     //         builder: (context) => new WebviewScaffold(url: "www.baidu.com",)));
+            //     //       MaterialPageRoute(
+            //     //         builder: (context) =>   WebviewScaffold(url: "www.baidu.com",)));
             //   },
             //   )
             // ],

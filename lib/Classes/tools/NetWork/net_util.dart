@@ -40,7 +40,7 @@ class NetUtil {
      if (method == GET) {
         //组合GET请求的参数
         if (params != null && params.isNotEmpty) {
-          StringBuffer sb = new StringBuffer("?");
+          StringBuffer sb =   StringBuffer("?");
           params.forEach((key, value) {
             sb.write("$key" + "=" + "$value" + "&");
           });

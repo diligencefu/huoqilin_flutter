@@ -13,7 +13,7 @@ class QFZiXunApis {
 
 
   static String getPath({String path: '', int page, String resType: 'json'}) {
-    StringBuffer sb = new StringBuffer(path);
+    StringBuffer sb =   StringBuffer(path);
     if (page != null) {
       sb.write('/$page');
     }

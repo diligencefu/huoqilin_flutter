@@ -45,7 +45,7 @@ class QFTopSelectView2State extends State<QFTopSelectView2> {
         }
         widget.onChanged(index);
       },
-      child: new Text(
+      child:   Text(
         "  " + title + "",
         style: TextStyle(
           fontSize: 14,
@@ -82,9 +82,9 @@ class QFTopSelectView2State extends State<QFTopSelectView2> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               getText(0, "新闻资讯"),
-              new Container(
-                padding: new EdgeInsets.all(0.0),
-                child: new Row(
+                Container(
+                padding:   EdgeInsets.all(0.0),
+                child:   Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     getText(1, "数据调研"),
@@ -96,9 +96,9 @@ class QFTopSelectView2State extends State<QFTopSelectView2> {
                   ],
                 ),
               ),
-              new Container(
-                padding: new EdgeInsets.all(0.0),
-                child: new Row(
+                Container(
+                padding:   EdgeInsets.all(0.0),
+                child:   Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     getText(2, "市场解读"),

@@ -15,15 +15,15 @@ class LoadingDialog extends Dialog {
 
   @override
   Widget build(BuildContext context) {
-    return new Material(
+    return   Material(
       //创建透明层
       type: MaterialType.transparency, //透明类型
-      child: new Center(
+      child:   Center(
         //保证控件居中效果
-        child: new SizedBox(
+        child:   SizedBox(
           width: 80.0,
           height: 80.0,
-          child: new Container( 
+          child:   Container( 
             decoration: ShapeDecoration(
               color: Color.fromARGB(240, 15, 18, 21),
               shape: RoundedRectangleBorder(
@@ -32,15 +32,15 @@ class LoadingDialog extends Dialog {
                 ),
               ),
             ),
-            child: new Column(
+            child:   Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.all(10),
-                  child: new CircularProgressIndicator(
+                  child:   CircularProgressIndicator(
                     backgroundColor: Colors.grey,
-                    valueColor: new AlwaysStoppedAnimation<Color>(
+                    valueColor:   AlwaysStoppedAnimation<Color>(
                         Color.fromARGB(255, 236, 241, 249)),
                   ),
                 ),

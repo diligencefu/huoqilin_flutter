@@ -80,7 +80,7 @@ class ZiXunMainModel1 {
 
   @override
   String toString() {
-    StringBuffer sb = new StringBuffer('{');
+    StringBuffer sb =   StringBuffer('{');
     sb.write("\"Id\":\"$qfId\"");
     sb.write(",\"ZXType\":$qfZXType");
     sb.write(",\"ProductId\":\"$qfProductId\"");

@@ -18,6 +18,8 @@ PODS:
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
+  - webview_flutter (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - device_info (from `.symlinks/plugins/device_info/ios`)
@@ -28,6 +30,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -50,6 +53,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/share/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  webview_flutter:
+    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
@@ -61,6 +66,7 @@ SPEC CHECKSUMS:
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
   share: 222b5dcc8031238af9d7de91149df65bad1aef75
   sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
+  webview_flutter: 9bd234c07e99632356cba112df56fd1d47d6b6e3
 
 PODFILE CHECKSUM: aff02bfeed411c636180d6812254b2daeea14d09
 

@@ -12,7 +12,7 @@ class Request {
   static void get(String url,Map<String, String> params, Function callBack,
       { Function errorBack}) async {
     if (params != null && params.isNotEmpty) {
-      StringBuffer sb = new StringBuffer("?");
+      StringBuffer sb =   StringBuffer("?");
       params.forEach((key, value) {
         sb.write("$key" + "=" + "$value" + "&");
       });

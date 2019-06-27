@@ -1,65 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/tools/FavoriteWidget.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
+
 import 'package:flutter_native_web/flutter_native_web.dart';
+import 'package:path/path.dart';
+import 'package:webview_flutter/webview_flutter.dart'; // Developed by  flutter team : widget  WebView
 
+// import 'package:flutter_native_web/flutterwebview.dart';
+
+// Developed by  flutter team : widget  WebView
 // import 'webview_scaffold.dart';
-class QFWebView extends StatefulWidget {
-  String url;
+class QFWebView extends StatelessWidget {
+  var url = "";
   String showTile;
-  QFWebView(this.url, this.showTile);
-  @override
-  QFWebViewState createState() => QFWebViewState();
-}
+  final key = UniqueKey();
 
-class QFWebViewState extends State<QFWebView> {
+  QFWebView(this.url, this.showTile);
   WebController webController;
 
-  void onWebCreated(webController) {
-    this.webController = webController;
-    this.webController.loadUrl(this.widget.url);
-    this.webController.onPageStarted.listen((url) => print("Loading $url"));
-    this
-        .webController
-        .onPageFinished
-        .listen((url) => print("Finished loading $url"));
+
+  back() {
+    // Navigator.pop();
   }
 
-  void initState() {
-    super.initState();
-    FlutterNativeWeb flutterWebView = new FlutterNativeWeb(
-      onWebCreated: onWebCreated,
-    );
-  }
-
-  Widget getss() {
-    return FlutterNativeWeb(onWebCreated: onWebCreated);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-
-    return new Scaffold(
-      appBar: PreferredSize(
-        child: Container(
-          child: AppBar(
-            title: Text(
-              this.widget.showTile,
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            actions: <Widget>[
-              // RaisedButton(
-              //   onPressed: () {},
-              //   child: const Text('Cookies'),
-              // ),
-            ],
-          ),
+  Widget buildNavigationBar() {
+    return Stack(
+      children: <Widget>[
+        Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -70,13 +38,60 @@ class QFWebViewState extends State<QFWebView> {
               ],
             ),
           ),
+          padding: EdgeInsets.fromLTRB(5, 35, 0, 0),
+          height: 88,
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 40,
+                child: GestureDetector(
+                    onTap: back,
+                    child:
+                        Image.asset('lib/assets/images/nav_return_white.png')),
+              ),
+              Expanded(
+                child: Text(
+                  showTile,
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Container(width: 44),
+            ],
+          ),
         ),
-        preferredSize: Size(MediaQuery.of(context).size.width, 44),
-      ),
-      body: new Container(
-        padding: EdgeInsets.only(top: 0),
-        child: FlutterNativeWeb(onWebCreated: onWebCreated),
-      ),
+      ],
+    );
+  }
+
+  Widget getSubViews() {
+    return Stack(
+      children: <Widget>[
+        // FlutterNativeWeb(
+        //   onWebCreated: onWebCreated,
+        // ),
+        // WebView(
+        //     debuggingEnabled: true,
+        //     key: UniqueKey(),
+        //     javascriptMode: JavascriptMode.unrestricted,
+        //     initialUrl: "https://www.baidu.com",
+        //     onPageFinished: (url){
+        //       GlobalVariable.setToast(url);
+        //     },),
+        buildNavigationBar(),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // final double statusBarHeight = MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      body: getSubViews()
     );
   }
 }

@@ -33,10 +33,8 @@ import 'package:easy_listview/easy_listview.dart';
 import 'choose_product_news/qf_show_products_page.dart';
 import 'zixun_article_detail_page.dart';
 import 'show_web_info_page.dart';
-// import 'package:flustars/flustars.dart';
-// import 'package:common_utils/common_utils.dart';
 
-// import 'package:base_library/base_library.dart';
+import 'package:huoqilin_project/Classes/tools/NetWork/net_util.dart';
 
 enum HomeListType {
   excellent,
@@ -70,6 +68,10 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   int _muneType = 1;
   int type2Select_index = 0;
 
+  bool isProduct = false;
+  // 源数据存放数组 产业数据
+  ZiXunShowProductModel mainModel;
+
   bool isnomore = false;
   bool isLoading = false;
   ScrollController scrollController = ScrollController();
@@ -79,13 +81,14 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   void initState() {
     super.initState();
 
-    Map<String, dynamic> map = new Map();
+    Map<String, dynamic> map =   Map();
     map["Id"] = 0;
     map["TypeName"] = "自选";
 
     selectModel = SpotTypes.fromJson(map);
 
     fetchData();
+    fetchProductData();
     scrollController.addListener(() {
       setState(() {
         _muneType = 1;
@@ -102,8 +105,8 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       case 0:
         Navigator.push(
           context,
-          new MaterialPageRoute(
-              builder: (context) => new QFShowProductNewsPage(
+            MaterialPageRoute(
+              builder: (context) =>   QFShowProductNewsPage(
                     onChanged: (SpotTypes product) {
                       selectModel = product;
                       _product_id = product.id.toString();
@@ -131,7 +134,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
         break;
     }
 
-    Map<String, dynamic> map = new Map();
+    Map<String, dynamic> map =   Map();
     map["Id"] = 0;
     map["TypeName"] = "自选";
 
@@ -144,6 +147,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   Future<void> refrenshData() async {
     currentPage = 1;
     fetchData();
+    fetchProductData();
     // GlobalVariable.showCenterShortToast("Begin refresh");
   }
 
@@ -162,7 +166,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       _last_new_date = "";
     }
     int pageSize = 10;
-    Map<String, String> map = new Map();
+    Map<String, String> map =   Map();
     map["userNo"] = UserInfo.userNo;
     map["pageIndex"] = "$currentPage";
     map["pageSize"] = "$pageSize";
@@ -655,8 +659,8 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       onTap: () {
         Navigator.push(
             context,
-            new MaterialPageRoute(
-                builder: (context) => new QFZiXunArticleDetailPage(model)));
+              MaterialPageRoute(
+                builder: (context) =>   QFZiXunArticleDetailPage(model)));
       },
       child: cell,
     );
@@ -783,15 +787,18 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       case 4:
         Navigator.push(
             context,
-            new MaterialPageRoute(
-              builder: (context) => new QFWebView(
+              MaterialPageRoute(
+              builder: (context) => QFWebView(
                     "https://www.qfsctech.com/8085/News/MacroData?tag=ios",
                     "宏观数据 - 国内",
                   ),
             ));
         break;
       case 5:
-        print("产业数据+产品id");
+        // print("产业数据+产品id");
+        setState(() {
+          isProduct = true;
+        });
         break;
       case 0:
         _bloack_id = "5";
@@ -883,7 +890,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
         return <Widget>[
           RefreshIndicator(onRefresh: refrenshData, child: createListView()),
           LoadingDialog(
-            text: "",
+            text: "xxxxxxx",
           )
         ];
       } else {
@@ -920,10 +927,98 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     }
   }
 
-  Widget showView() {
-    return Stack(
-      children: getChildren(),
+  Future<void> fetchProductData() async {
+    Map<String, String> map =   Map();
+    map["userNo"] = UserInfo.userNo;
+    map["typeId"] = "0";
+
+    NetUtil.get(QFZiXunApis.ZIXUNGetProductListByTypeId, (data) {
+      mainModel = ZiXunShowProductModel.fromJson(data);
+    }, params: map);
+  }
+
+  Widget chooseIsFollow(SpotTypesList model) {
+    if (model.isFollow == 1) {
+      return Chip(
+        shape:   RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0)),
+        backgroundColor: Color.fromARGB(255, 230, 236, 240),
+        label: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+               MaterialPageRoute(
+                  builder: (context) => QFWebView(
+                        "https://www.qfsctech.com/8085/News/IndustryData/?tag=ios&spotTypeID="+model.spotTypes.id.toString(),
+                        // "https://www.baidu.com",
+                        model.spotTypes.typeName,
+                      ),
+                ));
+          },
+          child: Text(model.spotTypes.typeName,
+              style: TextStyle(color: Color.fromARGB(255, 36, 46, 69))),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget getSection(DataList model) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          alignment: Alignment.bottomLeft,
+          height: 35,
+          child: Text(model.spotTypes.typeName, textAlign: TextAlign.left),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          alignment: Alignment.centerLeft,
+          child: Wrap(
+            spacing: 10.0,
+            children: model.spotTypesList
+                .map((language) => chooseIsFollow(language))
+                .toList(),
+          ),
+        )
+      ],
     );
+  }
+
+  List<Widget> getChilren() {
+    var list = <Widget>[];
+    for (var model in mainModel.dataList) {
+      var widget = getSection(model);
+      list.add(widget);
+    }
+    return list;
+  }
+
+  Widget createGirdView() {
+    var height = Screen.height - 200;
+    if (Screen.height >= 812) {
+      height -= 22;
+    }
+    return Container(
+      padding: EdgeInsets.all(10),
+      height: height,
+      child: ListView(
+        children: getChilren(),
+      ),
+    );
+  }
+
+  Widget showView() {
+    if (isProduct) {
+      isProduct = false;
+      return createGirdView();
+    } else {
+      return Stack(
+        children: getChildren(),
+      );
+    }
   }
 
   @override
@@ -948,8 +1043,8 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     GlobalVariable.setToast("搜索");
                     // Navigator.push(
                     //     context,
-                    //     new MaterialPageRoute(
-                    //         builder: (context) => new QFZiXunInfo(null)));
+                    //       MaterialPageRoute(
+                    //         builder: (context) =>   QFZiXunInfo(null)));
                   },
                 )
               ],

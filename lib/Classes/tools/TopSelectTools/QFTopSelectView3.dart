@@ -26,7 +26,7 @@ class QFTopSelectView3State extends State<QFTopSelectView3> {
             widget.onChanged(index);
           });
       },
-      child: new Text(
+      child:   Text(
         "  "+title+"  ",
         style: TextStyle(
             fontSize: 14,

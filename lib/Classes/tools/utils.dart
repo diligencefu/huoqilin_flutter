@@ -55,7 +55,7 @@ class Utils {
   /// 复制到剪粘板
   static copyToClipboard(final String text) {
     if (text == null) return;
-    Clipboard.setData(new ClipboardData(text: text));
+    Clipboard.setData(  ClipboardData(text: text));
   }
 
   static const RollupSize_Units = ["GB", "MB", "KB", "B"];

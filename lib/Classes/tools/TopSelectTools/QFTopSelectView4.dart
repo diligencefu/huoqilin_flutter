@@ -7,7 +7,7 @@ class QFTopSelectView4 extends StatefulWidget {
   final ValueChanged<int> onChanged;
   QFTopSelectView4({Key key, int selectIndex, @required this.onChanged})
       : this._selectIndex = selectIndex,
-        super(key: key) {}
+        super(key: key) ;
 
   @override
   QFTopSelectView4State createState() => QFTopSelectView4State();
@@ -27,7 +27,7 @@ class QFTopSelectView4State extends State<QFTopSelectView4> {
           });
 
       },
-      child: new Text(
+      child:   Text(
         "  "+title+"  ",
         style: TextStyle(
             fontSize: 14,

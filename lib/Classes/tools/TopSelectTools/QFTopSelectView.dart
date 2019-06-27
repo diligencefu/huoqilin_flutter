@@ -32,7 +32,7 @@ class QFTopSelectViewState extends State<QFTopSelectView> {
           widget.onChanged(index);
         });
       },
-      child: new Container(
+      child:   Container(
           alignment: Alignment.bottomCenter,
           height: 31,
           child: Column(
@@ -88,9 +88,9 @@ class QFTopSelectViewState extends State<QFTopSelectView> {
             // mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              new Container(
-                padding: new EdgeInsets.all(0.0),
-                child: new Row(
+                Container(
+                padding:   EdgeInsets.all(0.0),
+                child:   Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     getText(0, this.widget._selectModel.typeName),

@@ -42,7 +42,7 @@ class QFShowProductNewsPageState extends State<QFShowProductNewsPage> {
   }
 
   Future<void> changerFollowState(SpotTypesList model) async {
-    Map<String, String> map = new Map();
+    Map<String, String> map =   Map();
     map["userNo"] = UserInfo.userNo;
     map["productId"] = model.spotTypes.id.toString();
 
@@ -53,7 +53,7 @@ class QFShowProductNewsPageState extends State<QFShowProductNewsPage> {
   }
 
   Future<void> fetchData() async {
-    Map<String, String> map = new Map();
+    Map<String, String> map =   Map();
     map["userNo"] = UserInfo.userNo;
     map["typeId"] = _typeId;
 
@@ -191,7 +191,7 @@ class QFShowProductNewsPageState extends State<QFShowProductNewsPage> {
             spacing: 10.0,
             children: model.spotTypesList
                 .map((language) => Chip(
-                      shape: new RoundedRectangleBorder(
+                      shape:   RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0)),
                       backgroundColor: Color.fromARGB(255, 230, 236, 240),
                       label: GestureDetector(
@@ -297,7 +297,7 @@ class QFShowProductNewsPageState extends State<QFShowProductNewsPage> {
         actions: <Widget>[
           GestureDetector(
               onTap: () {
-                Map<String, dynamic> map = new Map();
+                Map<String, dynamic> map =   Map();
                 map["Id"] = 0;
                 map["TypeName"] = "自选";
 

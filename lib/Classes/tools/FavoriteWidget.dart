@@ -9,7 +9,7 @@ final int _favoriteCount;
 FavoriteWidget(this._isFavorited,this._favoriteCount);
 
   @override
-  FavoriteWidgetState createState() => new FavoriteWidgetState();
+  FavoriteWidgetState createState() =>   FavoriteWidgetState();
 }
 
 class FavoriteWidgetState extends State<FavoriteWidget> {
@@ -33,20 +33,20 @@ class FavoriteWidgetState extends State<FavoriteWidget> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        new Container(
-          padding: new EdgeInsets.all(0.0),
-          child: new IconButton(
-            icon: (_isFavorited ? new Icon(Icons.star) : new Icon(Icons.star_border)),
+          Container(
+          padding:   EdgeInsets.all(0.0),
+          child:   IconButton(
+            icon: (_isFavorited ?   Icon(Icons.star) :   Icon(Icons.star_border)),
             color: Colors.red[500],
             onPressed: (){
               _toggleFavorite();
             },
           ),
         ),
-        new SizedBox(
+          SizedBox(
           width: 18.0,
-          child: new Container(
-            child: new Text("$_favoriteCount"),
+          child:   Container(
+            child:   Text("$_favoriteCount"),
           ),
         )
       ],

@@ -19,22 +19,22 @@ class _QFZiXunInfo extends State<QFZiXunInfo> {
   Column buildButtonColumn(IconData icon, String label) {
 
     Color color = Theme.of(context).primaryColor;
-    return new Column(
+    return   Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        new IconButton(
+          IconButton(
           icon: Icon(icon, color: color),
           onPressed: () {
             print("text");
           },
         ),
 
-        // new Icon(icon, color: color),
-        new Container(
+        //   Icon(icon, color: color),
+          Container(
           margin: const EdgeInsets.only(top: 2.0),
-          child: new Text(label,
-              style: new TextStyle(
+          child:   Text(label,
+              style:   TextStyle(
                   fontSize: 12.0, fontWeight: FontWeight.w400, color: color)),
         )
       ],
@@ -43,48 +43,48 @@ class _QFZiXunInfo extends State<QFZiXunInfo> {
 
   Column buildTopButtonColumn(String label) {
     Color color = Color.fromARGB(120, 38, 110, 217);
-    return new Column(
+    return   Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text(label,
-              style: new TextStyle(
+            Text(label,
+              style:   TextStyle(
                   fontSize: 12.0, fontWeight: FontWeight.w400, color: color)),
         ]);
   }
 
   Widget titleScetion() {
-    return new Container(
+    return   Container(
       padding: const EdgeInsets.all(32.0),
-      child: new Row(
+      child:   Row(
         children: <Widget>[
-          new Expanded(
-            child: new Column(
+            Expanded(
+            child:   Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Container(
+                  Container(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: new Text(
+                  child:   Text(
                     "Itsmaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitle",
-                    style: new TextStyle(fontWeight: FontWeight.bold),
+                    style:   TextStyle(fontWeight: FontWeight.bold),
                     maxLines: 2,
                   ),
                 ),
-                new Text(
+                  Text(
                   "Imaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitlemaintitle",
-                  style: new TextStyle(color: Colors.grey),
+                  style:   TextStyle(color: Colors.grey),
                   maxLines: 2,
                 )
               ],
             ),
           ),
 
-          new FavoriteWidget(false, 41),
+            FavoriteWidget(false, 41),
 
-          // new IconButton(
+          //   IconButton(
           //   icon: (isFavorited
-          //       ? new Icon(Icons.star)
-          //       : new Icon(Icons.star_border)),
+          //       ?   Icon(Icons.star)
+          //       :   Icon(Icons.star_border)),
           //   onPressed: () {
           //     setState(() {
           //       if (isFavorited) {
@@ -103,10 +103,10 @@ class _QFZiXunInfo extends State<QFZiXunInfo> {
           //     });
           //   },
           // ),
-          // new Container(
+          //   Container(
           //   padding: const EdgeInsets.only(left: 0.0),
-          //   child: new Text("$favoriteCount",
-          //       style: new TextStyle(color: Colors.grey)),
+          //   child:   Text("$favoriteCount",
+          //       style:   TextStyle(color: Colors.grey)),
           // ),
         ],
       ),
@@ -114,8 +114,8 @@ class _QFZiXunInfo extends State<QFZiXunInfo> {
   }
 
   Widget buttonSection() {
-    return new Container(
-      child: new Row(
+    return   Container(
+      child:   Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           buildButtonColumn(Icons.call, "CALL"),
@@ -131,9 +131,9 @@ class _QFZiXunInfo extends State<QFZiXunInfo> {
   }
 
   Widget textSection() {
-    return new Container(
+    return   Container(
       padding: const EdgeInsets.all(32.0),
-      child: new Text(
+      child:   Text(
         '''
 Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. Activities enjoyed here include rowing, and riding the summer toboggan run.Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. Activities enjoyed here include rowing, and riding the summer toboggan run.
         ''',
@@ -143,14 +143,14 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
   }
 
   Widget topSelect() {
-    return new Container(
+    return   Container(
       padding: const EdgeInsets.all(0),
       height: 45,
-      child: new Column(
+      child:   Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          new Expanded(
-            child: new Row(
+            Expanded(
+            child:   Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 buildTopButtonColumn("自选"),
@@ -160,7 +160,7 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
               ],
             ),
           ),
-          // new Text(
+          //   Text(
           //   "   ",
           //   textAlign: TextAlign.left,
           //   style:TextStyle(backgroundColor:Color.fromARGB(255, 38, 110, 217),fontSize: 22,fontWeight: FontWeight.bold)
@@ -245,18 +245,18 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
         Column(
           children: <Widget>[
             Expanded(
-              child: new ListView(
+              child:   ListView(
                 padding: EdgeInsets.all(0),
                 controller: scrollController,
                 scrollDirection: Axis.vertical,
                 children: [
                   // topSelect(),
-                  new Image.asset(
+                    Image.asset(
                     'lib/assets/images/sky.jpg',
                     height: 240.0,
                     fit: BoxFit.cover,
                   ),
-                  // new Image.network(
+                  //   Image.network(
                   //   "http://img5.imgtn.bdimg.com/it/u=2458696988,2288615185&fm=26&gp=0.jpg",
                   //   height: 200,
                   //   fit: BoxFit.cover,
@@ -276,9 +276,9 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return   Scaffold(
         // title: "Flutter Demo",
-        // theme: new ThemeData(primarySwatch: Colors.blue),
+        // theme:   ThemeData(primarySwatch: Colors.blue),
         // appBar: AppBar(
         //   title: Text("资讯"),
         //   bottom: topSelect(),
