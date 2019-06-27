@@ -81,7 +81,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   void initState() {
     super.initState();
 
-    Map<String, dynamic> map =   Map();
+    Map<String, dynamic> map = Map();
     map["Id"] = 0;
     map["TypeName"] = "自选";
 
@@ -105,8 +105,8 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       case 0:
         Navigator.push(
           context,
-            MaterialPageRoute(
-              builder: (context) =>   QFShowProductNewsPage(
+          MaterialPageRoute(
+              builder: (context) => QFShowProductNewsPage(
                     onChanged: (SpotTypes product) {
                       selectModel = product;
                       _product_id = product.id.toString();
@@ -134,7 +134,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
         break;
     }
 
-    Map<String, dynamic> map =   Map();
+    Map<String, dynamic> map = Map();
     map["Id"] = 0;
     map["TypeName"] = "自选";
 
@@ -166,7 +166,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       _last_new_date = "";
     }
     int pageSize = 10;
-    Map<String, String> map =   Map();
+    Map<String, String> map = Map();
     map["userNo"] = UserInfo.userNo;
     map["pageIndex"] = "$currentPage";
     map["pageSize"] = "$pageSize";
@@ -659,8 +659,8 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       onTap: () {
         Navigator.push(
             context,
-              MaterialPageRoute(
-                builder: (context) =>   QFZiXunArticleDetailPage(model)));
+            MaterialPageRoute(
+                builder: (context) => QFZiXunArticleDetailPage(model)));
       },
       child: cell,
     );
@@ -786,13 +786,15 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     switch (index) {
       case 4:
         Navigator.push(
-            context,
-              MaterialPageRoute(
-              builder: (context) => QFWebView(
-                    "https://www.qfsctech.com/8085/News/MacroData?tag=ios",
-                    "宏观数据 - 国内",
-                  ),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => QFWebView(
+                  "https://www.qfsctech.com/8085/News/MacroData?tag=ios",
+                  "宏观数据 - 国内",
+                  Key('宏观数据 - 国内'),
+                ),
+          ),
+        );
         break;
       case 5:
         // print("产业数据+产品id");
@@ -817,11 +819,9 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
         refrenshData();
         break;
       default:
+        break;
     }
     _muneType = 1;
-
-    // setState(() {
-    // });
   }
 
   List<Widget> createVerticalmuneList() {
@@ -928,7 +928,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   }
 
   Future<void> fetchProductData() async {
-    Map<String, String> map =   Map();
+    Map<String, String> map = Map();
     map["userNo"] = UserInfo.userNo;
     map["typeId"] = "0";
 
@@ -940,18 +940,18 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   Widget chooseIsFollow(SpotTypesList model) {
     if (model.isFollow == 1) {
       return Chip(
-        shape:   RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
         backgroundColor: Color.fromARGB(255, 230, 236, 240),
         label: GestureDetector(
           onTap: () {
             Navigator.push(
                 context,
-               MaterialPageRoute(
+                MaterialPageRoute(
                   builder: (context) => QFWebView(
-                        "https://www.qfsctech.com/8085/News/IndustryData/?tag=ios&spotTypeID="+model.spotTypes.id.toString(),
-                        // "https://www.baidu.com",
+                        "https://www.qfsctech.com/8085/News/IndustryData/?tag=ios&spotTypeID=" +
+                            model.spotTypes.id.toString(),
                         model.spotTypes.typeName,
+                        Key('${model.spotTypes.typeName}'),
                       ),
                 ));
           },

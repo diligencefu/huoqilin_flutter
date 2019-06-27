@@ -2,29 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:flutter_native_web/flutter_native_web.dart';
-import 'package:path/path.dart';
-import 'package:webview_flutter/webview_flutter.dart'; // Developed by  flutter team : widget  WebView
-
-// import 'package:flutter_native_web/flutterwebview.dart';
-
-// Developed by  flutter team : widget  WebView
-// import 'webview_scaffold.dart';
 class QFWebView extends StatelessWidget {
-  var url = "";
-  String showTile;
-  final key = UniqueKey();
+  final String url;
+  final String showTile;
+  final Key key;
 
-  QFWebView(this.url, this.showTile);
-  WebController webController;
+  QFWebView(this.url, this.showTile, this.key);
 
-
-  back() {
-    // Navigator.pop();
+  back(context) {
+    Navigator.of(context).pop();
   }
 
-  Widget buildNavigationBar() {
+  Widget buildNavigationBar(context) {
     return Stack(
       children: <Widget>[
         Container(
@@ -45,7 +36,7 @@ class QFWebView extends StatelessWidget {
               Container(
                 width: 40,
                 child: GestureDetector(
-                    onTap: back,
+                    onTap: () => back(context),
                     child:
                         Image.asset('lib/assets/images/nav_return_white.png')),
               ),
@@ -67,31 +58,25 @@ class QFWebView extends StatelessWidget {
     );
   }
 
-  Widget getSubViews() {
+  Widget getSubViews(context) {
     return Stack(
       children: <Widget>[
-        // FlutterNativeWeb(
-        //   onWebCreated: onWebCreated,
-        // ),
         WebView(
-            debuggingEnabled: true,
-            key: UniqueKey(),
-            javascriptMode: JavascriptMode.unrestricted,
-            initialUrl: "https://www.baidu.com",
-            onPageFinished: (url){
-              GlobalVariable.setToast(url);
-            },),
-        buildNavigationBar(),
+          debuggingEnabled: true,
+          key: key,
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: url,
+          onPageFinished: (url) {
+            GlobalVariable.setToast(url);
+          },
+        ),
+        buildNavigationBar(context),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // final double statusBarHeight = MediaQuery.of(context).padding.top;
-
-    return Scaffold(
-      body: getSubViews()
-    );
+    return Scaffold(body: getSubViews(context));
   }
 }
