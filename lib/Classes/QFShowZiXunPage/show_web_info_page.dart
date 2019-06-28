@@ -16,6 +16,8 @@ class QFWebView extends StatelessWidget {
   }
 
   Widget buildNavigationBar(context) {
+   double _statusBarHeight = MediaQuery.of(context).padding.top;
+   double other = _statusBarHeight>25?24:0;
     return Stack(
       children: <Widget>[
         Container(
@@ -29,8 +31,8 @@ class QFWebView extends StatelessWidget {
               ],
             ),
           ),
-          padding: EdgeInsets.fromLTRB(5, 35, 0, 0),
-          height: 88,
+          padding: EdgeInsets.fromLTRB(5, _statusBarHeight>25?35:20, 0, 0),
+          height: 44 + _statusBarHeight,
           child: Row(
             children: <Widget>[
               Container(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class GlobalVariable {
+
   static Image getPicPlaceHolder() {
     return Image.asset(
-      "lib/assets/images/placeholder_image.imageset.png",
+      "lib/assets/images/placeholder_image.png",
       fit: BoxFit.cover,
     );
   }

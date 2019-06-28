@@ -1,15 +1,11 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix1;
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/QFZiXunInfo.dart';
+import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_list_model.dart';
 import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_show_product_model.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/common.dart';
 import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView.dart';
 import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView2.dart';
 import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView3.dart';
@@ -20,8 +16,6 @@ import 'package:huoqilin_project/Classes/tools/Screen.dart';
 
 import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
 
-import 'package:huoqilin_project/Classes/tools/NetWork/SKRequest.dart';
-import 'package:huoqilin_project/Classes/tools/screen.dart' as prefix2;
 import 'package:huoqilin_project/Classes/tools/user_info_cache/user_info.dart';
 
 import 'package:huoqilin_project/Classes/tools/loading_view/loading_view.dart';
@@ -35,7 +29,7 @@ import 'zixun_article_detail_page.dart';
 import 'show_web_info_page.dart';
 
 import 'package:huoqilin_project/Classes/tools/NetWork/net_util.dart';
-
+import 'zixun_search_page.dart';
 enum HomeListType {
   excellent,
   male,
@@ -77,6 +71,9 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   ScrollController scrollController = ScrollController();
 
   SpotTypes selectModel;
+
+    ZiXunListModel mainListModel;
+
   @override
   void initState() {
     super.initState();
@@ -173,6 +170,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     map["productId"] = _product_id;
     map["blockId"] = _bloack_id;
     map["isFollow"] = _is_follow;
+ 
     Request.get(QFZiXunApis.ZIXUNGetInformationList, map, (datas) {
       isLoading = false;
       if (datas != null) {
@@ -340,8 +338,12 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     borderRadius: BorderRadius.circular(3),
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl,
-                      placeholder: (context, url) =>
-                          GlobalVariable.getPicPlaceHolder(),
+                      placeholder: (context, url) => Container(
+                            width: width/3,
+                            height: 100,
+                            child: Image.asset(
+                                "lib/assets/images/placeholder_image.png"),
+                          ),
                       width: width / 3,
                       height: 100,
                       fit: BoxFit.cover,
@@ -354,8 +356,11 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     borderRadius: BorderRadius.circular(3),
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl2,
-                      placeholder: (context, url) =>
-                          GlobalVariable.getPicPlaceHolder(),
+                      placeholder: (context, url) => Container(
+                            width: width/3,
+                            height: 100,
+                            child: Image.asset(
+                                "lib/assets/images/placeholder_image.png")),
                       width: width / 3,
                       height: 100,
                       fit: BoxFit.cover,
@@ -368,8 +373,11 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     borderRadius: BorderRadius.circular(3),
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl3,
-                      placeholder: (context, url) =>
-                          GlobalVariable.getPicPlaceHolder(),
+                      placeholder: (context, url) => Container(
+                            width: width/3,
+                            height: 100,
+                            child: Image.asset(
+                                "lib/assets/images/placeholder_image.png")),
                       width: width / 3,
                       height: 100,
                       fit: BoxFit.cover,
@@ -478,8 +486,11 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     borderRadius: BorderRadius.circular(3),
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl,
-                      placeholder: (context, url) =>
-                          GlobalVariable.getPicPlaceHolder(),
+                      placeholder: (context, url) => Container(
+                            width: 90,
+                            height: 115,
+                            child: Image.asset(
+                                "lib/assets/images/placeholder_image.png")),
                       height: 90,
                       width: 115,
                       fit: BoxFit.fill,
@@ -890,7 +901,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
         return <Widget>[
           RefreshIndicator(onRefresh: refrenshData, child: createListView()),
           LoadingDialog(
-            text: "xxxxxxx",
+            text: "",
           )
         ];
       } else {
@@ -936,6 +947,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
       mainModel = ZiXunShowProductModel.fromJson(data);
     }, params: map);
   }
+
 
   Widget chooseIsFollow(SpotTypesList model) {
     if (model.isFollow == 1) {
@@ -1040,11 +1052,11 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   icon: Image.asset(
                       'lib/assets/images/search_icon_infomation.png'),
                   onPressed: () {
-                    GlobalVariable.setToast("搜索");
-                    // Navigator.push(
-                    //     context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) =>   QFZiXunInfo(null)));
+
+                    Navigator.push(
+                        context,
+                          MaterialPageRoute(
+                            builder: (context) =>   QFSearchZiXunPage(null)));
                   },
                 )
               ],

@@ -22,14 +22,14 @@ class ZiXunMainModel1 {
      String qfUrl;
      String qfVisitorsNum;
      String qfUpCount;
-     String qfViewCount;
+     int qfViewCount;
      String qfState;
      String qfSource;
      String qfCommentCount;
      String qfDelete;
-     String qfCreateTime ;
-     String qfCreateTime1 ;
-     String qfCreateTime2 ;
+     String qfCreateTime;
+     String qfCreateTime1;
+     String qfCreateTime2;
 
      double rowHeight;
      bool isLoaded = false;
@@ -55,6 +55,7 @@ class ZiXunMainModel1 {
         qfCreateTime1 = json['CreateTime'].toString().substring(0,10),
         qfCreateTime2 = json['CreateTime'].toString().substring(11).toString().substring(0,5),
         
+        qfViewCount = json['ViewCount'],
         qfCoverImgType = json['CoverImgType'],
         qfCoverImgUrl = json['CoverImgUrl'],
         qfCoverImgUrl2 = json['CoverImgUrl2'],
@@ -75,6 +76,7 @@ class ZiXunMainModel1 {
         'CoverImgUrl': qfCoverImgUrl,
         'CoverImgUrl2': qfCoverImgUrl2,
         'CoverImgUrl3': qfCoverImgUrl3,
+        'ViewCount': qfViewCount,
         // 'CreateTime': qfCreateTime,
       };
 

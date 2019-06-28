@@ -8,12 +8,12 @@ part of 'zi_xun_show_product_model.dart';
 
 ZiXunShowProductModel _$ZiXunShowProductModelFromJson(
     Map<String, dynamic> json) {
-  return   ZiXunShowProductModel(
+  return new ZiXunShowProductModel(
       json['Code'] as int,
       (json['DataList'] as List)
           ?.map((e) => e == null
               ? null
-              :   DataList.fromJson(e as Map<String, dynamic>))
+              : new DataList.fromJson(e as Map<String, dynamic>))
           ?.toList(),
       json['TotalCount'] as int);
 }
@@ -30,15 +30,15 @@ abstract class _$ZiXunShowProductModelSerializerMixin {
 }
 
 DataList _$DataListFromJson(Map<String, dynamic> json) {
-  return   DataList(
+  return new DataList(
       json['SpotTypes'] == null
           ? null
-          :   SpotTypes.fromJson(json['SpotTypes'] as Map<String, dynamic>),
+          : new SpotTypes.fromJson(json['SpotTypes'] as Map<String, dynamic>),
       json['IsFollow'] as int,
       (json['SpotTypesList'] as List)
           ?.map((e) => e == null
               ? null
-              :   SpotTypesList.fromJson(e as Map<String, dynamic>))
+              : new SpotTypesList.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 
@@ -54,7 +54,7 @@ abstract class _$DataListSerializerMixin {
 }
 
 SpotTypes _$SpotTypesFromJson(Map<String, dynamic> json) {
-  return   SpotTypes(
+  return new SpotTypes(
       json['Id'] as int,
       json['TypeName'] as String,
       json['ParentID'] as int,
@@ -78,10 +78,10 @@ abstract class _$SpotTypesSerializerMixin {
 }
 
 SpotTypesList _$SpotTypesListFromJson(Map<String, dynamic> json) {
-  return   SpotTypesList(
+  return new SpotTypesList(
       json['SpotTypes'] == null
           ? null
-          :   SpotTypes.fromJson(json['SpotTypes'] as Map<String, dynamic>),
+          : new SpotTypes.fromJson(json['SpotTypes'] as Map<String, dynamic>),
       json['IsFollow'] as int);
 }
 
