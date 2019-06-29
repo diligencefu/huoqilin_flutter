@@ -1,27 +1,31 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/article_show_comment_model.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_article_detail_model.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/QFZiXunApis.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/net_util.dart';
-import 'package:huoqilin_project/Classes/tools/loading_view/loading_view.dart';
-import 'package:huoqilin_project/Classes/tools/real_rich_text.dart';
-import 'package:huoqilin_project/Classes/tools/screen.dart';
-import 'package:huoqilin_project/Classes/tools/user_info_cache/user_info.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/article_show_comment_model.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/article_show_comment_model.dart'
+    as commentInfoData;
+import 'package:huoqilin_project/classes/zixun/zixun_models/article_show_likers_model.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/article_show_likers_model.dart'
+    as likerInfoData;
+
+import 'package:huoqilin_project/classes/zixun/zixun_models/zi_xun_article_detail_model.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/zixun_main_model1.dart';
+import 'package:huoqilin_project/configs/my_toast.dart';
+import 'package:huoqilin_project/net_works/net_util.dart';
+import 'package:huoqilin_project/net_works/zixun_api.dart';
+import 'package:huoqilin_project/tools/loading_view/loading_view.dart';
+import 'package:huoqilin_project/tools/real_rich_text.dart';
+import 'package:huoqilin_project/tools/screen.dart';
+import 'package:huoqilin_project/tools/user_info_cache/user_info.dart';
 
 // import 'webview_scaffold.dart';
 class QFZiXunArticleDetailPage extends StatefulWidget {
   ZiXunMainModel1 model;
-  Data1 data;
+  // Data1 data;
   QFZiXunArticleDetailPage(this.model);
   // 命名构造函数
   QFZiXunArticleDetailPage.otherModel(this.model);
@@ -41,10 +45,12 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
 
   ArticleShowCommentModel commentModel;
 
+  ArticleShowLikersModel likersModel;
   void initState() {
     super.initState();
     fetchData();
     requestCommentsData();
+    requestLikersData();
   }
 
   Future<void> fetchData() async {
@@ -52,7 +58,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     map["userNo"] = UserInfo.userNo;
     map["id"] = widget.model.qfId.toString();
 
-    NetUtil.get(QFZiXunApis.ZIXUNGetInformationById, (data) {
+    NetUtil.get(ZiXunApis.ZIXUNGetInformationById, (data) {
       print(data);
       mainModel = ZiXunArticleDetailModel.fromJson(data);
       setState(() {});
@@ -65,10 +71,24 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     map["newsId"] = widget.model.qfId.toString();
     // map["newsId"] = "273429";
 
-    NetUtil.get(QFZiXunApis.ZIXUNGetCommentListById, (data) {
+    NetUtil.get(ZiXunApis.ZIXUNGetCommentListById, (data) {
       print(data);
       commentModel = ArticleShowCommentModel.fromJson(data);
-      print(commentModel.commentData);
+      print(commentModel.data1);
+      setState(() {});
+    }, params: map);
+  }
+
+  Future<void> requestLikersData() async {
+    Map<String, String> map = Map();
+    map["userNo"] = UserInfo.userNo;
+    map["newsId"] = widget.model.qfId.toString();
+    // map["newsId"] = "273429";
+
+    NetUtil.get(ZiXunApis.ZIXUNGetGetUpListById, (data) {
+      print(data);
+      likersModel = ArticleShowLikersModel.fromJson(data);
+      print(commentModel.data1);
       setState(() {});
     }, params: map);
   }
@@ -80,7 +100,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     map["refId"] = mainModel.data1.id.toString();
     map["upType"] = "0";
 
-    NetUtil.get(QFZiXunApis.ZIXUNdoUp, (data) {}, params: map);
+    NetUtil.get(ZiXunApis.ZIXUNdoUp, (data) {}, params: map);
   }
 
   Future<void> collectionSwitch() async {
@@ -90,7 +110,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     map["userNo"] = UserInfo.userNo;
     map["id"] = mainModel.data1.id.toString();
 
-    NetUtil.get(QFZiXunApis.ZIXUNdoFavorite, (data) {}, params: map);
+    NetUtil.get(ZiXunApis.ZIXUNdoFavorite, (data) {}, params: map);
   }
 
   Widget buildBottomView() {
@@ -104,17 +124,17 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
   List<Widget> getlikers() {
     var comments = <Widget>[];
 
-    if (commentModel == null || commentModel.commentData == null) {
+    if (likersModel == null || likersModel.data1 == null) {
       var text = Container(
         child: Center(
-          child: Text("暂无评论"),
+          child: Text("正在加载..."),
         ),
       );
       comments.add(text);
 
       return comments;
     } else {
-      for (var model in commentModel.commentData) {
+      for (var model in likersModel.data1) {
         comments.add(createLikeView(model));
       }
       return comments;
@@ -130,7 +150,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     );
   }
 
-  Widget createLikeView(CommentData model) {
+  Widget createLikeView(likerInfoData.Data1 model) {
     return Container(
       height: 66,
       padding: EdgeInsets.only(top: 6),
@@ -143,7 +163,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      GlobalVariable.setToast("查看" + model.user.nickName);
+                      MyToast.setToast("查看" + model.user.nickName);
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
@@ -174,8 +194,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                           alignment: Alignment.centerLeft,
                           child: GestureDetector(
                             onTap: () {
-                              GlobalVariable.setToast(
-                                  "查看" + model.user.nickName);
+                              MyToast.setToast("查看" + model.user.nickName);
                             },
                             child: Text(
                               model.user.nickName,
@@ -233,7 +252,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                 color: Color.fromARGB(255, 66, 133, 217), fontSize: 15),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                GlobalVariable.setToast("查看" + model.user.nickName);
+                MyToast.setToast("查看" + model.user.nickName);
               },
           ),
           TextSpan(text: " 回复 "),
@@ -243,7 +262,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                 color: Color.fromARGB(255, 66, 133, 217), fontSize: 15),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                GlobalVariable.setToast("查看" + model.user.nickName);
+                MyToast.setToast("查看" + model.user.nickName);
               },
           ),
           TextSpan(text: " : " + model.comment.content),
@@ -260,7 +279,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                 color: Color.fromARGB(255, 66, 133, 217), fontSize: 15),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                GlobalVariable.setToast("回复：" + model.user.nickName);
+                MyToast.setToast("回复：" + model.user.nickName);
               },
           ),
           TextSpan(text: " : " + model.comment.content),
@@ -269,7 +288,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     }
   }
 
-  List<Widget> setReplys(CommentData list) {
+  List<Widget> setReplys(commentInfoData.Data1 list) {
     var replys = <Widget>[];
     for (var model in list.reCommentList) {
       replys.add(buildReplys(model));
@@ -277,7 +296,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     return replys;
   }
 
-  Widget buildReplyCommentView(CommentData model) {
+  Widget buildReplyCommentView(commentInfoData.Data1 model) {
     return Container(
       color: Color.fromARGB(255, 239, 242, 249),
       child: Column(
@@ -286,7 +305,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     );
   }
 
-  Widget buildComment(CommentData model) {
+  Widget buildComment(commentInfoData.Data1 model) {
     return Container(
       padding: EdgeInsets.only(top: 12),
       child: Column(
@@ -298,7 +317,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    GlobalVariable.setToast("查看" + model.user.nickName);
+                    MyToast.setToast("查看" + model.user.nickName);
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
@@ -328,7 +347,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                         alignment: Alignment.centerLeft,
                         child: GestureDetector(
                           onTap: () {
-                            GlobalVariable.setToast("查看" + model.user.nickName);
+                            MyToast.setToast("查看" + model.user.nickName);
                           },
                           child: Text(
                             model.user.nickName,
@@ -385,17 +404,17 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
   List<Widget> getComments() {
     var comments = <Widget>[];
 
-    if (commentModel == null || commentModel.commentData == null) {
+    if (commentModel == null || commentModel.data1 == null) {
       var text = Container(
         child: Center(
-          child: Text("暂无评论"),
+          child: Text("正在加载评论..."),
         ),
       );
       comments.add(text);
 
       return comments;
     } else {
-      for (var model in commentModel.commentData) {
+      for (var model in commentModel.data1) {
         comments.add(buildComment(model));
       }
       return comments;
@@ -411,8 +430,18 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     );
   }
 
-//线
+  //线
   Widget buildLineView() {
+    var comments = 0;
+    if (commentModel != null && commentModel.data1 != null) {
+      comments = commentModel.data1.length;
+    }
+
+    var likers = 0;
+    if (likersModel != null && likersModel.data1 != null) {
+      likers = likersModel.data1.length;
+    }
+
     return Container(
       color: Colors.white,
       padding: EdgeInsets.only(top: 23, bottom: 0),
@@ -436,7 +465,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                           topLeft: Radius.circular(4.0),
                           bottomLeft: Radius.circular(4.0)),
                       child: Container(
-                        height: 40,
+                        height: 35,
                         width: (Screen.width - 40) / 2,
                         color: Color.fromARGB(255, 38, 110, 217),
                         padding: EdgeInsets.all(1),
@@ -455,7 +484,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                                   : Colors.white,
                               child: Center(
                                 child: Text(
-                                  "评论（156）",
+                                  "评论（$comments）",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: !isShow_comment
@@ -473,7 +502,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                           topRight: Radius.circular(4.0),
                           bottomRight: Radius.circular(4.0)),
                       child: Container(
-                        height: 40,
+                        height: 35,
                         width: (Screen.width - 40) / 2,
                         color: Color.fromARGB(255, 38, 110, 217),
                         padding: EdgeInsets.all(1),
@@ -492,7 +521,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                                   : Colors.white,
                               child: Center(
                                 child: Text(
-                                  "点赞（1312）",
+                                  "点赞（$likers）",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: isShow_comment
@@ -538,7 +567,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     var width = (Screen.width - 40) / 3 - 10;
 
     return Container(
-      height: 30,
+      height: 28,
       width: width,
       child: Stack(
         alignment: Alignment.center,
@@ -564,12 +593,34 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
               if (title == "收藏") {
                 collectionSwitch();
                 mainModel.data2 = mainModel.data2 == 1 ? 0 : 1;
-                setState(() {});
               }
               if (title == "点赞") {
+                if (likersModel == null) {
+                  return;
+                }
                 likeSwitch();
+
+                if (mainModel.data3 == 1) {
+                  for (var model in likersModel.data1) {
+                    if (model.user.userNo == UserInfo.userNo) {
+                      likersModel.data1.remove(model);
+                      break;
+                    }
+                  }
+                } else {
+                  Map<String, dynamic> map = {
+                    "User": {
+                      "UserNo": UserInfo.userNo,
+                      "NickName": UserInfo.nickName,
+                      "Personalized": UserInfo.personalized,
+                      "HeadPortrait": UserInfo.headPortrait
+                    }
+                  };
+                  likerInfoData.Data1 data = likerInfoData.Data1.fromJson(map);
+
+                  likersModel.data1.insert(0, data);
+                }
                 mainModel.data3 = mainModel.data3 == 1 ? 0 : 1;
-                setState(() {});
               }
               setState(() {});
             },
@@ -579,7 +630,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     );
   }
 
-//评论，收���，点赞
+  //评论，收���，点赞
   Widget buildOprationView() {
     return Container(
       padding: EdgeInsets.only(left: 0, right: 0, top: 20),
@@ -596,7 +647,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     );
   }
 
-//免责声明
+  //免责声明
   Widget buildDisclaimerView() {
     double fontSize = 16;
     return Container(
@@ -622,7 +673,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                   fontWeight: FontWeight.normal),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  GlobalVariable.setToast("电话：0755-82569529 ");
+                  MyToast.setToast("电话：0755-82569529 ");
                 },
             ),
             TextSpan(
@@ -640,7 +691,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                   fontWeight: FontWeight.normal),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  GlobalVariable.setToast("邮箱：znsm@qfsctech.com");
+                  MyToast.setToast("邮箱：znsm@qfsctech.com");
                 },
             ),
             TextSpan(
@@ -760,7 +811,7 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
     );
   }
 
-//作者及��览量
+  //作者及��览量
   Widget createAuthorView() {
     // assert(buildHtml() == buildHtml());
     return Container(

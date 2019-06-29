@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
+import 'package:huoqilin_project/configs/my_toast.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class QFWebView extends StatelessWidget {
@@ -69,7 +69,7 @@ class QFWebView extends StatelessWidget {
           javascriptMode: JavascriptMode.unrestricted,
           initialUrl: url,
           onPageFinished: (url) {
-            GlobalVariable.setToast(url);
+            MyToast.setToast(url);
           },
         ),
         buildNavigationBar(context),

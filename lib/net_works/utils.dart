@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui show window;
@@ -17,6 +18,7 @@ class Utils {
     assert(name.length > 0);
     final int hash = name.hashCode & 0xffff;
     final double hue = (360.0 * hash / (1 << 15)) % 360.0;
+
     return HSVColor.fromAHSV(1.0, hue, 0.4, 0.90).toColor();
   }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/tools/FavoriteWidget.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/zixun_main_model1.dart';
+import 'package:huoqilin_project/tools/FavoriteWidget.dart';
 
 class QFZiXunInfo extends StatefulWidget {
   ZiXunMainModel1 model;

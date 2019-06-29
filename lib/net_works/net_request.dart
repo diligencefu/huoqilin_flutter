@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
-import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
+import 'package:huoqilin_project/configs/my_toast.dart';
 
 class Request {
 
@@ -29,7 +29,7 @@ class Request {
       }
     } catch (exception) {
       print(exception.toString());
-      GlobalVariable.showCenterShortToast(exception.toString());
+      MyToast.showCenterShortToast(exception.toString());
       if (errorBack != null) {
         errorBack(exception);
       }
@@ -44,7 +44,7 @@ class Request {
         callBack(res.body);
       }
     } catch (exception) {
-      GlobalVariable.showCenterShortToast(exception.toString());
+      MyToast.showCenterShortToast(exception.toString());
       if (callError != null) {
         callError(exception);
       }

@@ -1,4 +1,4 @@
-class QFZiXunApis {
+class ZiXunApis {
 
   /// 最新项目tab (首页的第二个tab) http://wanandroid.com/article/listproject/0/json
 
@@ -21,6 +21,8 @@ class QFZiXunApis {
   static const String ZIXUNdoFavorite = kBaseUrl+"/News/doFavorite";
 //#MARK: -资讯评论列表
   static const String ZIXUNGetCommentListById = kBaseUrl+"/News/GetCommentListById";
+//#MARK: -资讯点赞列表
+  static const String ZIXUNGetGetUpListById = kBaseUrl+"/News/GetUpListById";
 
 
 

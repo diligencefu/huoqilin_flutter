@@ -1,35 +1,31 @@
 import 'dart:convert';
-import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_list_model.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_show_product_model.dart';
-import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView.dart';
-import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView2.dart';
-import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView3.dart';
-import 'package:huoqilin_project/Classes/tools/TopSelectTools/QFTopSelectView4.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/SKRequest.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/QFZiXunApis.dart';
-import 'package:huoqilin_project/Classes/tools/Screen.dart';
 
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
-
-import 'package:huoqilin_project/Classes/tools/user_info_cache/user_info.dart';
-
-import 'package:huoqilin_project/Classes/tools/loading_view/loading_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
-
 import 'package:easy_listview/easy_listview.dart';
-import 'choose_product_news/qf_show_products_page.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_show_products_page.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/zi_xun_list_model.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/zixun_main_model1.dart';
+import 'package:huoqilin_project/net_works/net_request.dart';
+import 'package:huoqilin_project/net_works/net_util.dart';
+import 'package:huoqilin_project/net_works/zixun_api.dart';
+import 'package:huoqilin_project/tools/TopSelectTools/QFTopSelectView.dart';
+import 'package:huoqilin_project/tools/TopSelectTools/QFTopSelectView2.dart';
+import 'package:huoqilin_project/tools/TopSelectTools/QFTopSelectView3.dart';
+import 'package:huoqilin_project/tools/TopSelectTools/QFTopSelectView4.dart';
+import 'package:huoqilin_project/tools/loading_view/loading_view.dart';
+import 'package:huoqilin_project/tools/screen.dart';
+import 'package:huoqilin_project/tools/user_info_cache/user_info.dart';
 import 'zixun_article_detail_page.dart';
 import 'show_web_info_page.dart';
 
-import 'package:huoqilin_project/Classes/tools/NetWork/net_util.dart';
+import 'zixun_models/zi_xun_show_product_model.dart';
 import 'zixun_search_page.dart';
+
 enum HomeListType {
   excellent,
   male,
@@ -70,9 +66,12 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
   bool isLoading = false;
   ScrollController scrollController = ScrollController();
 
+  var placeHolder =
+      Image.asset("lib/assets/images/placeholder_image.png", fit: BoxFit.contain);
+
   SpotTypes selectModel;
 
-    ZiXunListModel mainListModel;
+  ZiXunListModel mainListModel;
 
   @override
   void initState() {
@@ -170,8 +169,8 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     map["productId"] = _product_id;
     map["blockId"] = _bloack_id;
     map["isFollow"] = _is_follow;
- 
-    Request.get(QFZiXunApis.ZIXUNGetInformationList, map, (datas) {
+
+    Request.get(ZiXunApis.ZIXUNGetInformationList, map, (datas) {
       isLoading = false;
       if (datas != null) {
         // datas.toString();
@@ -339,10 +338,9 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl,
                       placeholder: (context, url) => Container(
-                            width: width/3,
+                            width: width / 3,
                             height: 100,
-                            child: Image.asset(
-                                "lib/assets/images/placeholder_image.png"),
+                            child: placeHolder,
                           ),
                       width: width / 3,
                       height: 100,
@@ -357,10 +355,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl2,
                       placeholder: (context, url) => Container(
-                            width: width/3,
-                            height: 100,
-                            child: Image.asset(
-                                "lib/assets/images/placeholder_image.png")),
+                          width: width / 3, height: 100, child: placeHolder),
                       width: width / 3,
                       height: 100,
                       fit: BoxFit.cover,
@@ -374,10 +369,7 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl3,
                       placeholder: (context, url) => Container(
-                            width: width/3,
-                            height: 100,
-                            child: Image.asset(
-                                "lib/assets/images/placeholder_image.png")),
+                          width: width / 3, height: 100, child: placeHolder),
                       width: width / 3,
                       height: 100,
                       fit: BoxFit.cover,
@@ -486,11 +478,8 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                     borderRadius: BorderRadius.circular(3),
                     child: CachedNetworkImage(
                       imageUrl: model.qfCoverImgUrl,
-                      placeholder: (context, url) => Container(
-                            width: 90,
-                            height: 115,
-                            child: Image.asset(
-                                "lib/assets/images/placeholder_image.png")),
+                      placeholder: (context, url) =>
+                          Container(width: 90, height: 115, child: placeHolder),
                       height: 90,
                       width: 115,
                       fit: BoxFit.fill,
@@ -943,11 +932,10 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
     map["userNo"] = UserInfo.userNo;
     map["typeId"] = "0";
 
-    NetUtil.get(QFZiXunApis.ZIXUNGetProductListByTypeId, (data) {
+    NetUtil.get(ZiXunApis.ZIXUNGetProductListByTypeId, (data) {
       mainModel = ZiXunShowProductModel.fromJson(data);
     }, params: map);
   }
-
 
   Widget chooseIsFollow(SpotTypesList model) {
     if (model.isFollow == 1) {
@@ -1052,11 +1040,10 @@ class _QFShowZiXunPage extends State<QFShowZiXunPage> {
                   icon: Image.asset(
                       'lib/assets/images/search_icon_infomation.png'),
                   onPressed: () {
-
                     Navigator.push(
                         context,
-                          MaterialPageRoute(
-                            builder: (context) =>   QFSearchZiXunPage(null)));
+                        MaterialPageRoute(
+                            builder: (context) => QFSearchZiXunPage(null)));
                   },
                 )
               ],

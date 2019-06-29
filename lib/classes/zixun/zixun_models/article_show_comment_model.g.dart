@@ -12,9 +12,8 @@ ArticleShowCommentModel _$ArticleShowCommentModelFromJson(
       json['Code'] as int,
       json['TotalCount'] as int,
       (json['Data1'] as List)
-          ?.map((e) => e == null
-              ? null
-              : new CommentData.fromJson(e as Map<String, dynamic>))
+          ?.map((e) =>
+              e == null ? null : new Data1.fromJson(e as Map<String, dynamic>))
           ?.toList(),
       json['Data2'] as int);
 }
@@ -22,18 +21,18 @@ ArticleShowCommentModel _$ArticleShowCommentModelFromJson(
 abstract class _$ArticleShowCommentModelSerializerMixin {
   int get code;
   int get totalCount;
-  List<CommentData> get commentData;
+  List<Data1> get data1;
   int get data2;
   Map<String, dynamic> toJson() => <String, dynamic>{
         'Code': code,
         'TotalCount': totalCount,
-        'Data1': commentData,
+        'Data1': data1,
         'Data2': data2
       };
 }
 
-CommentData _$CommentDataFromJson(Map<String, dynamic> json) {
-  return new CommentData(
+Data1 _$Data1FromJson(Map<String, dynamic> json) {
+  return new Data1(
       json['User'] == null
           ? null
           : new User.fromJson(json['User'] as Map<String, dynamic>),
@@ -51,7 +50,7 @@ CommentData _$CommentDataFromJson(Map<String, dynamic> json) {
           ?.toList());
 }
 
-abstract class _$CommentDataSerializerMixin {
+abstract class _$Data1SerializerMixin {
   User get user;
   Comment get comment;
   bool get isCommentAuthor;

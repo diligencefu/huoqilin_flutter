@@ -1,15 +1,17 @@
 import 'package:easy_listview/easy_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_article_detail_page.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/QFZiXunApis.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/net_util.dart';
-import 'package:huoqilin_project/Classes/tools/loading_view/loading_view.dart';
-import 'package:huoqilin_project/Classes/tools/user_info_cache/user_info.dart';
-import 'choose_product_news/zi_xun_list_model.dart';
-import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_article_detail_page.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/zi_xun_list_model.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/zixun_main_model1.dart';
+import 'package:huoqilin_project/configs/my_toast.dart';
+import 'package:huoqilin_project/net_works/net_util.dart';
+import 'package:huoqilin_project/net_works/zixun_api.dart';
+import 'package:huoqilin_project/tools/loading_view/loading_view.dart';
+import 'package:huoqilin_project/tools/user_info_cache/user_info.dart';
+
 
 class QFSearchZiXunPage extends StatefulWidget {
   ZiXunMainModel1 model;
@@ -26,7 +28,7 @@ class QFSearchZiXunPageState extends State<QFSearchZiXunPage> {
   String searchText = "";
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     // fetchSearchInfoData();
   }
@@ -45,14 +47,14 @@ class QFSearchZiXunPageState extends State<QFSearchZiXunPage> {
     map["pageSize"] = "$pageSize";
     map["keywords"] = searchText;
 
-    NetUtil.get(QFZiXunApis.ZIXUNSearchInformation, (data) {
+    NetUtil.get(ZiXunApis.ZIXUNSearchInformation, (data) {
       ZiXunListModel mainModel = ZiXunListModel.fromJson(data);
       isnomore = !(mainModel.data2 > currentPage * pageSize);
       isLoading = false;
 
       if (currentPage == 1) {
         if (mainModel.data1.length == 0) {
-          GlobalVariable.setToast("暂无相关内容");
+          MyToast.setToast("暂无相关内容");
         }
         modules.clear();
       }
@@ -76,13 +78,14 @@ class QFSearchZiXunPageState extends State<QFSearchZiXunPage> {
 
   Widget createInputView() {
     final controller = TextEditingController();
+    controller.text = searchText;
     return Container(
-        padding: EdgeInsets.all(0),
+        padding: EdgeInsets.only(bottom: 5),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(3.0),
           child: Container(
               color: Color.fromARGB(255, 230, 236, 240),
-              height: 35,
+              height: 40,
               child: Row(
                 children: <Widget>[
                   Container(
@@ -93,19 +96,21 @@ class QFSearchZiXunPageState extends State<QFSearchZiXunPage> {
                     child: Container(
                       padding: EdgeInsets.only(left: 8, top: 20),
                       alignment: Alignment.centerLeft,
-                      // height: 36,
-                      // color: Colors.red,
                       child: TextField(
+                        key: Key("inputKey"),
                         cursorColor: Colors.grey,
                         controller: controller,
                         // maxLength: 30, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
                         decoration: InputDecoration(
-                          // hintText: "输入产品名称",
-                          border: InputBorder.none,
-                        ),
+                            hintText: "输入产品名称",
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(color: Colors.grey)
+                            // labelText: "sss",
+                            ),
+
                         maxLines: 1, //最大行数
                         // autocorrect: true, //是否自动更正
-                        // autofocus: true, //是否自动对焦
+                        autofocus: true, //是否自动对焦
                         obscureText: false, //是否是密码
                         textAlign: TextAlign.left, //文本对齐方式
                         style: TextStyle(
@@ -115,7 +120,7 @@ class QFSearchZiXunPageState extends State<QFSearchZiXunPage> {
                         onChanged: (text) {
                           //内容改变的回调
                           searchText = text;
-                          print('change $text');
+                          // print('change $text');
                         },
                         onSubmitted: (text) {
                           //内容提交(按回车)的回调
@@ -268,7 +273,7 @@ class QFSearchZiXunPageState extends State<QFSearchZiXunPage> {
                 child: GestureDetector(
                   onTap: () {
                     if (searchText.length == 0) {
-                      GlobalVariable.setToast("请输入关键字");
+                      MyToast.setToast("请输入关键字");
                     } else {
                       refrenshData();
                     }

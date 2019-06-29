@@ -13,20 +13,20 @@ part 'article_show_comment_model.g.dart';
   int totalCount;
 
   @JsonKey(name: 'Data1')
-  List<CommentData> commentData;
+  List<Data1> data1;
 
   @JsonKey(name: 'Data2')
   int data2;
 
-  ArticleShowCommentModel(this.code,this.totalCount,this.commentData,this.data2,);
-
+  ArticleShowCommentModel(this.code,this.totalCount,this.data1,this.data2,);
+ArticleShowCommentModel.instence();
   factory ArticleShowCommentModel.fromJson(Map<String, dynamic> srcJson) => _$ArticleShowCommentModelFromJson(srcJson);
 
 }
 
   
 @JsonSerializable()
-  class CommentData extends Object with _$CommentDataSerializerMixin{
+  class Data1 extends Object with _$Data1SerializerMixin{
 
   @JsonKey(name: 'User')
   User user;
@@ -49,9 +49,9 @@ part 'article_show_comment_model.g.dart';
   @JsonKey(name: 'ReCommentList')
   List<ReCommentList> reCommentList;
 
-  CommentData(this.user,this.comment,this.isCommentAuthor,this.isDynamicAuthor,this.isUp,this.createDatetimeText,this.reCommentList,);
+  Data1(this.user,this.comment,this.isCommentAuthor,this.isDynamicAuthor,this.isUp,this.createDatetimeText,this.reCommentList,);
 
-  factory CommentData.fromJson(Map<String, dynamic> srcJson) => _$CommentDataFromJson(srcJson);
+  factory Data1.fromJson(Map<String, dynamic> srcJson) => _$Data1FromJson(srcJson);
 
 }
 

@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import './Classes/QFShowMinePage/QFShowMinePage.dart';
-import './Classes/QFShowMunePage/QFShowMunePage.dart';
-import 'Classes/QFShowSupplyDemandPage/QFShowSupplyDemandPage.dart';
-import 'Classes/QFShowZiXunPage/QFShowZiXunPage.dart';
+import 'classes/mine/QFShowMinePage.dart';
+import 'classes/mune/QFShowMunePage.dart';
+import 'classes/zixun/zi_xun_main_page.dart';
 
 
 void main() => runApp(MyApp());

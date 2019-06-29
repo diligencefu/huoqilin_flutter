@@ -23,6 +23,8 @@ part 'zi_xun_article_detail_model.g.dart';
 
   ZiXunArticleDetailModel(this.code,this.totalCount,this.data1,this.data2,this.data3,);
 
+  ZiXunArticleDetailModel.instence();
+
   factory ZiXunArticleDetailModel.fromJson(Map<String, dynamic> srcJson) => _$ZiXunArticleDetailModelFromJson(srcJson);
 
 }

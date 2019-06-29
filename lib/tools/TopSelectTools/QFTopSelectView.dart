@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/choose_product_news/zi_xun_show_product_model.dart';
+import 'package:huoqilin_project/classes/zixun/zixun_models/zi_xun_show_product_model.dart';
 class QFTopSelectView extends StatefulWidget {
   final int _selectIndex;
   final SpotTypes _selectModel;

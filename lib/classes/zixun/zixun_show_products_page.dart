@@ -4,17 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:huoqilin_project/Classes/tools/FavoriteWidget.dart';
-import 'package:huoqilin_project/Classes/QFShowZiXunPage/zixun_main_model/zixun_main_model1.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/QFZiXunApis.dart';
-import 'package:huoqilin_project/Classes/tools/global_variable/QF_global_variables.dart';
-import 'package:huoqilin_project/Classes/tools/Screen.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/SKRequest.dart';
-import 'package:huoqilin_project/Classes/tools/user_info_cache/user_info.dart';
-import 'zi_xun_show_product_model.dart';
-import 'package:huoqilin_project/Classes/tools/NetWork/net_util.dart';
-import 'chip_widget.dart';
-import 'package:huoqilin_project/Classes/tools/utils.dart';
+
+import 'package:huoqilin_project/classes/zixun/zixun_models/zi_xun_show_product_model.dart';
+import 'package:huoqilin_project/net_works/net_util.dart';
+import 'package:huoqilin_project/net_works/zixun_api.dart';
+import 'package:huoqilin_project/tools/screen.dart';
+import 'package:huoqilin_project/tools/user_info_cache/user_info.dart';
 
 class QFShowProductNewsPage extends StatefulWidget {
   final SpotTypes _selectModel;
@@ -46,7 +41,7 @@ class QFShowProductNewsPageState extends State<QFShowProductNewsPage> {
     map["userNo"] = UserInfo.userNo;
     map["productId"] = model.spotTypes.id.toString();
 
-    NetUtil.get(QFZiXunApis.ZIXUNProductFollowProduct, (data) {
+    NetUtil.get(ZiXunApis.ZIXUNProductFollowProduct, (data) {
       model.isFollow = model.isFollow == 0 ? 1 : 0;
       setState(() {});
     }, params: map);
@@ -57,7 +52,7 @@ class QFShowProductNewsPageState extends State<QFShowProductNewsPage> {
     map["userNo"] = UserInfo.userNo;
     map["typeId"] = _typeId;
 
-    NetUtil.get(QFZiXunApis.ZIXUNGetProductListByTypeId, (data) {
+    NetUtil.get(ZiXunApis.ZIXUNGetProductListByTypeId, (data) {
       mainModel = ZiXunShowProductModel.fromJson(data);
       setState(() {});
     }, params: map);
