@@ -9,7 +9,7 @@ class MyColor {
 
   static const textGreyColor = Color.fromARGB(255, 152, 163, 182);
 
-  static const backColor = Color.fromARGB(255, 239, 243, 249);
+  static const backColor = Color.fromARGB(255, 235, 239, 243);
 
   static const redColor = Color.fromARGB(255, 255, 46, 23);
 
@@ -18,7 +18,7 @@ class MyColor {
     return Color.fromARGB(255, value, value, value);
   }
 
-  static Color getRGBColor(int r, int g, int b) {
+  static Color setRGBColor(int r, int g, int b) {
 
     return Color.fromARGB(255, r, g, b);
   }

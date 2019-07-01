@@ -1,8 +1,9 @@
+library public;
 
-import 'net_util.dart';
-import 'zixun_api.dart';
-import 'net_request.dart';
-import 'net_util.dart';
+export 'net_util.dart';
+export 'zixun_api.dart';
+export 'net_request.dart';
+export 'net_util.dart';
 class NetWork{
 
 }
