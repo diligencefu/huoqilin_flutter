@@ -169,12 +169,6 @@ class QFZiXunArticleDetailPageState extends State<QFZiXunArticleDetailPage> {
                       borderRadius: BorderRadius.circular(3),
                       child: CachedNetworkImage(
                         imageUrl: model.user.headPortrait,
-                        // placeholder: (context, url) => Container(
-                        //       width: 40,
-                        //       height: 40,
-                        //       child: Image.asset(
-                        //           "lib/assets/images/user_placeholder_image.jpg"),
-                        //     ),
                         width: 40,
                         height: 40,
                         fit: BoxFit.fill,
