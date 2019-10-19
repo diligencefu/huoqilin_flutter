@@ -100,27 +100,27 @@ class RealRichText extends Text {
       }
     });
 
-    Widget result = _RichTextWrapper(
-        textAlign: textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
-        textDirection:
-            textDirection, // RichText uses Directionality.of to obtain a default if this is null.
-        locale:
-            locale, // RichText uses Localizations.localeOf to obtain a default if this is null
-        softWrap: softWrap ?? defaultTextStyle.softWrap,
-        overflow: overflow ?? defaultTextStyle.overflow,
-        textScaleFactor:
-            textScaleFactor ?? MediaQuery.textScaleFactorOf(context),
-        maxLines: maxLines ?? defaultTextStyle.maxLines,
-        text: textSpan);
-    if (semanticsLabel != null) {
-      result = Semantics(
-          textDirection: textDirection,
-          label: semanticsLabel,
-          child: ExcludeSemantics(
-            child: result,
-          ));
-    }
-    return result;
+    // Widget result = _RichTextWrapper(
+    //     textAlign: textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
+    //     textDirection:
+    //         textDirection, // RichText uses Directionality.of to obtain a default if this is null.
+    //     locale:
+    //         locale, // RichText uses Localizations.localeOf to obtain a default if this is null
+    //     softWrap: softWrap ?? defaultTextStyle.softWrap,
+    //     overflow: overflow ?? defaultTextStyle.overflow,
+    //     textScaleFactor:
+    //         textScaleFactor ?? MediaQuery.textScaleFactorOf(context),
+    //     maxLines: maxLines ?? defaultTextStyle.maxLines,
+    //     text: textSpan);
+    // if (semanticsLabel != null) {
+    //   result = Semantics(
+    //       textDirection: textDirection,
+    //       label: semanticsLabel,
+    //       child: ExcludeSemantics(
+    //         child: result,
+    //       ));
+    // }
+    // return result;
   }
 }
 
@@ -192,10 +192,10 @@ class ImageResolver {
     assert(_imageStream != null);
 
     this._listener = listener;
-    if (_imageStream.key != oldImageStream?.key) {
-      oldImageStream?.removeListener(_handleImageChanged);
-      _imageStream.addListener(_handleImageChanged);
-    }
+    // if (_imageStream.key != oldImageStream?.key) {
+    //   oldImageStream?.removeListener(_handleImageChanged);
+    //   _imageStream.addListener(_handleImageChanged);
+    // }
   }
 
   void _handleImageChanged(ImageInfo imageInfo, bool synchronousCall) {
@@ -203,15 +203,15 @@ class ImageResolver {
     _listener?.call(imageInfo, synchronousCall);
   }
 
-  void addListening() {
-    if (this._listener != null) {
-      _imageStream?.addListener(_handleImageChanged);
-    }
-  }
+  // void addListening() {
+  //   if (this._listener != null) {
+  //     _imageStream?.addListener(_handleImageChanged);
+  //   }
+  // }
 
-  void stopListening() {
-    _imageStream?.removeListener(_handleImageChanged);
-  }
+  // void stopListening() {
+  //   _imageStream?.removeListener(_handleImageChanged);
+  // }
 }
 
 /// Just a subclass of RichText for overriding createRenderObject
@@ -219,32 +219,32 @@ class ImageResolver {
 ///
 /// No more special purpose.
 class _RichTextWrapper extends RichText {
-  const _RichTextWrapper({
-    Key key,
-    @required TextSpan text,
-    TextAlign textAlign = TextAlign.start,
-    TextDirection textDirection,
-    bool softWrap = true,
-    TextOverflow overflow = TextOverflow.clip,
-    double textScaleFactor = 1.0,
-    int maxLines,
-    Locale locale,
-  })  : assert(text != null),
-        assert(textAlign != null),
-        assert(softWrap != null),
-        assert(overflow != null),
-        assert(textScaleFactor != null),
-        assert(maxLines == null || maxLines > 0),
-        super(
-            key: key,
-            text: text,
-            textAlign: textAlign,
-            textDirection: textDirection,
-            softWrap: softWrap,
-            overflow: overflow,
-            textScaleFactor: textScaleFactor,
-            maxLines: maxLines,
-            locale: locale);
+  // const _RichTextWrapper({
+  //   Key key,
+  //   @required TextSpan text,
+  //   TextAlign textAlign = TextAlign.start,
+  //   TextDirection textDirection,
+  //   bool softWrap = true,
+  //   TextOverflow overflow = TextOverflow.clip,
+  //   double textScaleFactor = 1.0,
+  //   int maxLines,
+  //   Locale locale,
+  // })  : assert(text != null),
+  //       assert(textAlign != null),
+  //       assert(softWrap != null),
+  //       assert(overflow != null),
+  //       assert(textScaleFactor != null),
+  //       assert(maxLines == null || maxLines > 0);
+        // super(
+        //     key: key,
+        //     text: text,
+        //     textAlign: textAlign,
+        //     textDirection: textDirection,
+        //     softWrap: softWrap,
+        //     overflow: overflow,
+        //     textScaleFactor: textScaleFactor,
+        //     maxLines: maxLines,
+        //     locale: locale);
 
   @override
   RenderParagraph createRenderObject(BuildContext context) {
@@ -296,7 +296,7 @@ class _RealRichRenderParagraph extends RenderParagraph {
     super.attach(owner);
     text.children.forEach((textSpan) {
       if (textSpan is ImageSpan) {
-        textSpan.imageResolver.addListening();
+        // textSpan.imageResolver.addListening();
       }
     });
   }
@@ -306,7 +306,7 @@ class _RealRichRenderParagraph extends RenderParagraph {
     super.detach();
     text.children.forEach((textSpan) {
       if (textSpan is ImageSpan) {
-        textSpan.imageResolver.stopListening();
+        // textSpan.imageResolver.stopListening();
       }
     });
   }
